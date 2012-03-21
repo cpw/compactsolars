@@ -13,8 +13,9 @@
     </description>
 
 	<property name="modname" value="mod_compactsolars" />
-	<property name="version" value="1.0" />
-	<property name="mcp.home" location="/home/cpw/minecraft1dev/forge1.3.3.12" />
+	<property name="version" value="1.2" />
+	<property name="mcdev.home" location="/home/cpw/minecraft1dev"/>
+	<property name="mcp.home" location="${mcdev.home}/forge1.3.3.12" />
 	<property name="mcp.obfoutput" location="${mcp.home}/reobf" />
 	<property name="client.mcp.obfoutput" location="${mcp.obfoutput}/minecraft" />
 	<property name="server.mcp.obfoutput" location="${mcp.obfoutput}/minecraft_server" />
@@ -25,7 +26,7 @@
 	<property name="common.src.dir" location="${basedir}/common" />
 	<property name="client.src.dir" location="${basedir}/client" />
 	<property name="server.src.dir" location="${basedir}/server" />
-	<property name="api.src.dir" location="${basedir}/../ic2-1.70-api/src" />
+	<property name="ic2api.src.dir" location="${mcdev.home}/ic2-1.70-api/src" />
 	<property name="resource.dir" location="${basedir}/resources" />
 
 	<macrodef name="side">
@@ -98,7 +99,7 @@
 				<present present="both" targetdir="${common.src.dir}" />
 			</fileset>
 			<fileset dir="${delete-targ}">
-				<present present="both" targetdir="${api.src.dir}" />
+				<present present="both" targetdir="${ic2api.src.dir}" />
 			</fileset>
 		</delete>
 	</target>
@@ -110,7 +111,7 @@
 		<copy todir="${merge-to}" overwrite="true" verbose="true">
 			<fileset dir="${side-from}" includes="**/*.java" />
 			<fileset dir="${common.src.dir}" includes="**/*.java" />
-			<fileset dir="${api.src.dir}" includes="**/*.java" />
+			<fileset dir="${ic2api.src.dir}" includes="**/*.java" />
 		</copy>
 	</target>
 

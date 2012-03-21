@@ -75,4 +75,8 @@ public enum CompactSolarType {
 		return ordinal();
 	}
 
+	public String[] tileEntityNames() {
+		return new String[] { "CompactSolarType."+name(), name(), name()+" Solar Array" };
+	}
+
 }

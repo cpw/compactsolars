@@ -1,6 +1,8 @@
 package cpw.mods.compactsolars.server;
 
 import java.io.File;
+import java.lang.reflect.Field;
+import java.util.Map;
 
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityItem;
@@ -8,6 +10,7 @@ import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ICrafting;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.TileEntity;
 import cpw.mods.compactsolars.CompactSolarType;
 import cpw.mods.compactsolars.ContainerCompactSolar;
 import cpw.mods.compactsolars.IProxy;
@@ -28,8 +31,25 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public void registerTileEntities() {
-		for (CompactSolarType typ : CompactSolarType.values()) {
-			ModLoader.RegisterTileEntity(typ.clazz, typ.name());
+
+		try {
+			Field idToNameMap = TileEntity.class.getDeclaredField("a");
+			idToNameMap.setAccessible(true);
+			@SuppressWarnings("unchecked")
+			Map<String, Class<?>> map = (Map<String, Class<?>>) idToNameMap.get(null);
+			for (CompactSolarType typ : CompactSolarType.values()) {
+				String[] tileNames = typ.tileEntityNames();
+				ModLoader.RegisterTileEntity(typ.clazz, tileNames[0]);
+				for (int i = 1; i < tileNames.length; i++) {
+					map.put(tileNames[i], typ.clazz);
+				}
+
+			}
+		} catch (Exception e) {
+			// UNPOSSIBLE? hope so
+			ModLoader.getLogger().severe("A fatal error occured initializing CompactSolars!");
+			e.printStackTrace();
+			throw new RuntimeException(e);
 		}
 	}
 
@@ -40,7 +60,7 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public void showGUI(TileEntityCompactSolar te, EntityPlayer player) {
-		ModLoader.OpenGUI(player, te.getType().guiId, te, new ContainerCompactSolar(player.inventory,te, te.getType()));
+		ModLoader.OpenGUI(player, te.getType().guiId, te, new ContainerCompactSolar(player.inventory, te, te.getType()));
 	}
 
 	@Override
@@ -50,7 +70,7 @@ public class ServerProxy implements IProxy {
 
 	@Override
 	public void applyExtraDataToDrops(EntityItem entityitem, NBTTagCompound copy) {
-        entityitem.item.setTagCompound(copy);
+		entityitem.item.setTagCompound(copy);
 	}
 
 	@Override

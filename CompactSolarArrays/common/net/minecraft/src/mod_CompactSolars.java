@@ -19,7 +19,7 @@ public class mod_CompactSolars extends BaseModMp {
 	public static float productionRate=1.0F;
 	@Override
 	public String getVersion() {
-		return "1.0";
+		return "1.2";
 	}
 
 	@Override
