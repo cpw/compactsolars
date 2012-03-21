@@ -73,7 +73,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		}
 		int energyProduction = 0;
 
-		if (theSunIsVisible) {
+		if (theSunIsVisible && (mod_CompactSolars.productionRate==1 || random.nextInt(mod_CompactSolars.productionRate)==0)) {
 			energyProduction = generateEnergy();
 		}
 		if (energyProduction > 0 && inventory[0] != null && (Item.itemsList[inventory[0].itemID] instanceof IElectricItem)) {
@@ -256,5 +256,18 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 			EnergyNet.getForWorld(worldObj).removeTileEntity(this);
 		}
 		super.invalidate();
+	}
+	@Override
+	public ItemStack getStackInSlotOnClosing(int var1) {
+    if (this.inventory[var1] != null)
+    {
+        ItemStack var2 = this.inventory[var1];
+        this.inventory[var1] = null;
+        return var2;
+    }
+    else
+    {
+        return null;
+    }
 	}
 }

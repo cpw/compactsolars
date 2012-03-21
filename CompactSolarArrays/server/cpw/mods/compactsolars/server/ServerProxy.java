@@ -6,16 +6,15 @@ import java.util.Map;
 
 import net.minecraft.src.Container;
 import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
-import net.minecraft.src.ICrafting;
+import net.minecraft.src.EntityPlayerMP;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
 import cpw.mods.compactsolars.CompactSolarType;
 import cpw.mods.compactsolars.ContainerCompactSolar;
 import cpw.mods.compactsolars.IProxy;
 import cpw.mods.compactsolars.TileEntityCompactSolar;
-import cpw.mods.ironchest.ContainerIronChestBase;
 
 public class ServerProxy implements IProxy {
 
@@ -39,7 +38,7 @@ public class ServerProxy implements IProxy {
 			Map<String, Class<?>> map = (Map<String, Class<?>>) idToNameMap.get(null);
 			for (CompactSolarType typ : CompactSolarType.values()) {
 				String[] tileNames = typ.tileEntityNames();
-				ModLoader.RegisterTileEntity(typ.clazz, tileNames[0]);
+				ModLoader.registerTileEntity(typ.clazz, tileNames[0]);
 				for (int i = 1; i < tileNames.length; i++) {
 					map.put(tileNames[i], typ.clazz);
 				}
@@ -59,11 +58,6 @@ public class ServerProxy implements IProxy {
 	}
 
 	@Override
-	public void showGUI(TileEntityCompactSolar te, EntityPlayer player) {
-		ModLoader.OpenGUI(player, te.getType().guiId, te, new ContainerCompactSolar(player.inventory, te, te.getType()));
-	}
-
-	@Override
 	public void registerRenderInformation() {
 		// NOOP on server
 	}
@@ -74,7 +68,13 @@ public class ServerProxy implements IProxy {
 	}
 
 	@Override
-	public void registerGUI(int guiId) {
-		// NOOP on server
+	public Container getGuiContainer(int ID, EntityPlayerMP player, World world, int X, int Y, int Z) {
+		TileEntity te=world.getBlockTileEntity(X, Y, Z);
+		if (te!=null && te instanceof TileEntityCompactSolar) {
+			TileEntityCompactSolar tecs = (TileEntityCompactSolar) te;
+			return new ContainerCompactSolar(player.inventory, tecs, tecs.getType());
+		} else {
+			return null;
+		}
 	}
 }

@@ -6,10 +6,8 @@ import cpw.mods.compactsolars.CompactSolarType;
 import cpw.mods.compactsolars.ContainerCompactSolar;
 import cpw.mods.compactsolars.TileEntityCompactSolar;
 import net.minecraft.src.Container;
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.GuiContainer;
 import net.minecraft.src.IInventory;
-import net.minecraft.src.ModLoader;
 
 public class GUISolar extends GuiContainer {
 	public enum GUI {
@@ -34,14 +32,6 @@ public class GUISolar extends GuiContainer {
 				}
 			}
 			return null;
-		}
-		public static void showGUI(TileEntityCompactSolar te, EntityPlayer player) {
-			GUISolar gui=buildGUI(te.getType(),player.inventory,te);
-			if (gui!=null) {
-				ModLoader.OpenGUI(player, gui);
-			} else {
-				player.displayGUIChest(te);
-			}
 		}
 	}
 

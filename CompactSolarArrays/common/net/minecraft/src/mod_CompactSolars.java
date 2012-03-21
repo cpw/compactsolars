@@ -4,34 +4,52 @@ import java.io.File;
 
 import net.minecraft.src.forge.Configuration;
 import net.minecraft.src.forge.MinecraftForge;
+import net.minecraft.src.forge.NetworkMod;
+import net.minecraft.src.forge.Property;
 import cpw.mods.compactsolars.BlockCompactSolar;
 import cpw.mods.compactsolars.CompactSolarType;
 import cpw.mods.compactsolars.IProxy;
 import cpw.mods.compactsolars.ItemCompactSolar;
 import cpw.mods.compactsolars.ServerClientProxy;
-import cpw.mods.compactsolars.TileEntityCompactSolar;
+import static cpw.mods.compactsolars.Version.*;
 
-
-public class mod_CompactSolars extends BaseModMp {
+public class mod_CompactSolars extends NetworkMod {
 
 	public static IProxy proxy;
 	public static BlockCompactSolar compactSolarBlock;
-	public static float productionRate=1.0F;
+	public static int productionRate=1;
+	public static mod_CompactSolars instance;
 	@Override
 	public String getVersion() {
-		return "1.2";
+		return version();
 	}
 
 	@Override
+	public String getName() {
+		return name();
+	}
+	
+	@Override
 	public void load() {
-		MinecraftForge.versionDetect("CompactSolars", 1, 3, 3);
+		MinecraftForge.versionDetect("CompactSolars", 1, 4, 0);
 		proxy=ServerClientProxy.getProxy();
+		if (mod_CompactSolars.instance==null) {
+			mod_CompactSolars.instance=this;
+		}
+		MinecraftForge.setGuiHandler(mod_CompactSolars.instance, proxy);
 		File cfgFile = new File(proxy.getMinecraftDir(), "config/IC2CompactSolars.cfg");
 		Configuration cfg = new Configuration(cfgFile);
 		try {
 			cfg.load();
-			compactSolarBlock = new BlockCompactSolar(Integer.parseInt(cfg.getOrCreateBlockIdProperty("compactSolar", 183).value));
-			CompactSolarType.initGUIs(cfg);
+			Property block = cfg.getOrCreateBlockIdProperty("compactSolar", 183);
+			block.comment="The block id for the compact solar arrays.";
+			compactSolarBlock = new BlockCompactSolar(Integer.parseInt(block.value));
+			Property scale = cfg.getOrCreateIntProperty("scaleFactor", Configuration.GENERAL_PROPERTY, 1);
+			scale.comment="The EU generation scaling factor. " +
+					"The average number of ticks needed to generate one EU packet." +
+					"1 is every tick, 2 is every other tick etc. " +
+					"Each Solar will still generate a whole packet (8, 64, 512 EU).";
+			productionRate = Integer.parseInt(scale.value);
 		} catch (Exception e) {
 			ModLoader.getLogger().severe("CompactSolars was unable to load it's configuration successfully");
 			e.printStackTrace(System.err);
@@ -39,18 +57,24 @@ public class mod_CompactSolars extends BaseModMp {
 		} finally {
 			cfg.save();
 		}
-		ModLoader.RegisterBlock(compactSolarBlock, ItemCompactSolar.class);
+		ModLoader.registerBlock(compactSolarBlock, ItemCompactSolar.class);
 		proxy.registerTranslations();
 		proxy.registerTileEntities();
 		proxy.registerRenderInformation();
 	}
 
 	@Override
-	public void ModsLoaded() {
+	public void modsLoaded() {
 		CompactSolarType.generateRecipes(compactSolarBlock);
 	}
 
-	public static void openGUI(EntityPlayer player, TileEntityCompactSolar te) {
-		proxy.showGUI(te,player);
+	@Override
+	public boolean clientSideRequired() {
+		return true;
+	}
+
+	@Override
+	public boolean serverSideRequired() {
+		return false;
 	}
 }

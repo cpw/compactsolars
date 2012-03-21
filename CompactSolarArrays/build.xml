@@ -13,9 +13,14 @@
     </description>
 
 	<property name="modname" value="mod_compactsolars" />
-	<property name="version" value="1.2" />
-	<property name="mcdev.home" location="/home/cpw/minecraft1dev"/>
-	<property name="mcp.home" location="${mcdev.home}/forge1.3.3.12" />
+	<property name="version.file" value="cpw/mods/compactsolars/Version.java"/>
+	<property name="version.major" value="2"/>
+	<property name="version.minor" value="0"/>
+	<property name="version.rev" value="0"/>
+	<property name="version.build" value="0"/>
+	<property name="version" value="${version.major}.${version.minor}.${version.rev}" />
+	<property name="mcdev.home" location="/home/cpw/projects/mcworkspace"/>
+	<property name="mcp.home" location="${mcdev.home}/forge59" />
 	<property name="mcp.obfoutput" location="${mcp.home}/reobf" />
 	<property name="client.mcp.obfoutput" location="${mcp.obfoutput}/minecraft" />
 	<property name="server.mcp.obfoutput" location="${mcp.obfoutput}/minecraft_server" />
@@ -26,7 +31,7 @@
 	<property name="common.src.dir" location="${basedir}/common" />
 	<property name="client.src.dir" location="${basedir}/client" />
 	<property name="server.src.dir" location="${basedir}/server" />
-	<property name="ic2api.src.dir" location="${mcdev.home}/ic2-1.70-api/src" />
+	<property name="ic2api.src.dir" location="${mcdev.home}/ic2api181/src" />
 	<property name="resource.dir" location="${basedir}/resources" />
 
 	<macrodef name="side">
@@ -56,7 +61,9 @@
 		<antcall target="clean-source">
 			<param name="side" value="server" />
 		</antcall>
-		<exec executable="${mcp.home}/updatemd5.sh" dir="${mcp.home}" />
+		<exec executable="${mcp.home}/updatemd5.sh" dir="${mcp.home}">
+			<arg value="-f"/>
+		</exec>
 	</target>
 
 	<target name="build-client" depends="init,clean,merge-client,buildandreobfmcp">
@@ -112,6 +119,14 @@
 			<fileset dir="${side-from}" includes="**/*.java" />
 			<fileset dir="${common.src.dir}" includes="**/*.java" />
 			<fileset dir="${ic2api.src.dir}" includes="**/*.java" />
+			<filterchain>
+				<replacetokens>
+			    	<token key="MAJOR" value="${version.major}" />
+				    <token key="MINOR" value="${version.minor}" />
+				    <token key="REV" value="${version.rev}" />
+				    <token key="BUILD" value="${version.build}" />
+				</replacetokens>
+			</filterchain>
 		</copy>
 	</target>
 

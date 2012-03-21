@@ -3,11 +3,10 @@ package cpw.mods.compactsolars;
 import java.io.File;
 
 import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.NBTTagCompound;
+import net.minecraft.src.forge.IGuiHandler;
 
-public interface IProxy {
-
+public interface IProxy extends IGuiHandler {
 	File getMinecraftDir();
 
 	void registerTranslations();
@@ -16,11 +15,7 @@ public interface IProxy {
 
 	boolean isRemote();
 
-	void showGUI(TileEntityCompactSolar te, EntityPlayer player);
-
 	void registerRenderInformation();
 
 	void applyExtraDataToDrops(EntityItem entityitem, NBTTagCompound copy);
-
-	void registerGUI(int guiId);
 }

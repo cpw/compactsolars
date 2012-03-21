@@ -5,20 +5,20 @@ import java.lang.reflect.Field;
 import java.util.Map;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.src.BaseModMp;
 import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayer;
+import net.minecraft.src.EntityPlayerSP;
 import net.minecraft.src.GuiScreen;
 import net.minecraft.src.ModLoader;
-import net.minecraft.src.ModLoaderMp;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
+import net.minecraft.src.World;
+import net.minecraft.src.forge.IGuiHandler;
 import net.minecraft.src.forge.MinecraftForgeClient;
 import cpw.mods.compactsolars.CompactSolarType;
 import cpw.mods.compactsolars.IProxy;
 import cpw.mods.compactsolars.TileEntityCompactSolar;
 
-public class ClientProxy extends BaseModMp implements IProxy {
+public class ClientProxy implements IProxy, IGuiHandler {
 	@Override
 	public File getMinecraftDir() {
 		return Minecraft.getMinecraftDir();
@@ -27,7 +27,7 @@ public class ClientProxy extends BaseModMp implements IProxy {
 	@Override
 	public void registerTranslations() {
 		for (CompactSolarType typ : CompactSolarType.values()) {
-			ModLoader.AddLocalization(typ.name() + ".name", typ.friendlyName);
+			ModLoader.addLocalization(typ.name() + ".name", typ.friendlyName);
 		}
 	}
 
@@ -41,7 +41,7 @@ public class ClientProxy extends BaseModMp implements IProxy {
 			Map<String, Class<?>> map = (Map<String, Class<?>>) idToNameMap.get(null);
 			for (CompactSolarType typ : CompactSolarType.values()) {
 				String[] tileNames = typ.tileEntityNames();
-				ModLoader.RegisterTileEntity(typ.clazz, tileNames[0]);
+				ModLoader.registerTileEntity(typ.clazz, tileNames[0]);
 				for (int i = 1; i < tileNames.length; i++) {
 					map.put(tileNames[i], typ.clazz);
 				}
@@ -61,33 +61,6 @@ public class ClientProxy extends BaseModMp implements IProxy {
 	}
 
 	@Override
-	public GuiScreen HandleGUI(int i) {
-		for (CompactSolarType type : CompactSolarType.values()) {
-			if (type.guiId == i) {
-				return GUISolar.GUI.buildGUI(type, ModLoader.getMinecraftInstance().thePlayer.inventory, CompactSolarType.makeEntity(type.ordinal()));
-			}
-		}
-		return null;
-	}
-
-	@Override
-	public String getVersion() {
-		// NOOP we don't get called like that
-		return "";
-	}
-
-	@Override
-	public void load() {
-		// NOOP we don't get called like that
-
-	}
-
-	@Override
-	public void showGUI(TileEntityCompactSolar te, EntityPlayer player) {
-		GUISolar.GUI.showGUI(te, player);
-	}
-
-	@Override
 	public void registerRenderInformation() {
 		MinecraftForgeClient.preloadTexture("/cpw/mods/compactsolars/sprites/block_textures.png");
 	}
@@ -98,8 +71,14 @@ public class ClientProxy extends BaseModMp implements IProxy {
 	}
 
 	@Override
-	public void registerGUI(int guiId) {
-		ModLoaderMp.RegisterGUI(this, guiId);
+	public GuiScreen getGuiScreen(int ID, EntityPlayerSP player, World world, int X, int Y, int Z) {
+		TileEntity te=world.getBlockTileEntity(X, Y, Z);
+		if (te!=null && te instanceof TileEntityCompactSolar) {
+			TileEntityCompactSolar tecs=(TileEntityCompactSolar) te;
+			return GUISolar.GUI.buildGUI(tecs.getType(), player.inventory, tecs);
+		} else {
+			return null;
+		}
 	}
 
 }

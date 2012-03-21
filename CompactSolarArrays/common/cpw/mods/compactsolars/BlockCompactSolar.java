@@ -1,5 +1,6 @@
 package cpw.mods.compactsolars;
 
+import java.util.ArrayList;
 import java.util.Random;
 
 import net.minecraft.src.BlockContainer;
@@ -75,8 +76,11 @@ public class BlockCompactSolar extends BlockContainer implements ITextureProvide
         }
         
 		TileEntity te = world.getBlockTileEntity(i, j, k);
-        mod_CompactSolars.openGUI(player, (TileEntityCompactSolar)te);
-        return true;
+		if (te!=null && te instanceof TileEntityCompactSolar) {
+			TileEntityCompactSolar tecs = (TileEntityCompactSolar) te;
+			player.openGui(mod_CompactSolars.instance, tecs.getType().ordinal(), world, i, j, k);
+		}
+		return true;
 	}
 	
 	protected int damageDropped(int i) {
@@ -125,4 +129,12 @@ public class BlockCompactSolar extends BlockContainer implements ITextureProvide
         }
 	}
 
+	@SuppressWarnings({ "unchecked", "rawtypes" })
+	@Override
+	public void addCreativeItems(ArrayList itemList) {
+		for (CompactSolarType type : CompactSolarType.values()) {
+			itemList.add(new ItemStack(this,1,type.ordinal()));
+		}
+		
+	}
 }
