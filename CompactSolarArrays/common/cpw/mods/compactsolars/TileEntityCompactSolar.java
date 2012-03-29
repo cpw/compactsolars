@@ -30,8 +30,8 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	private boolean initialized;
 	public boolean theSunIsVisible;
 	private int tick;
-	private boolean rains;
-	private boolean darkWorld;
+	private boolean canRain;
+	private boolean noSunlight;
 	private boolean compatibilityMode;
 
 	public TileEntityCompactSolar() {
@@ -60,11 +60,11 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 			} else {
 				EnergyNet.getForWorld(worldObj).addTileEntity(this);
 			}
-			rains=worldObj.getWorldChunkManager().getBiomeGenAt(xCoord, zCoord).getIntRainfall()==0;
-			darkWorld=worldObj.worldProvider.hasNoSky;
+			canRain=worldObj.getWorldChunkManager().getBiomeGenAt(xCoord, zCoord).getIntRainfall()>0;
+			noSunlight=worldObj.worldProvider.hasNoSky;
 			initialized = true;
 		}
-		if (darkWorld) {
+		if (noSunlight) {
 			return;
 		}
 		if (tick-- == 0) {
@@ -86,7 +86,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	}
 
 	private void updateSunState() {
-		boolean isRaining= rains && ( worldObj.isRaining() || worldObj.isThundering());
+		boolean isRaining= canRain && ( worldObj.isRaining() || worldObj.isThundering());
 		theSunIsVisible=worldObj.isDaytime() && !isRaining && worldObj.canBlockSeeTheSky(xCoord, yCoord+1, zCoord);
 	}
 

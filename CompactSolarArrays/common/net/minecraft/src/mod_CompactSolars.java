@@ -25,13 +25,8 @@ public class mod_CompactSolars extends NetworkMod {
 	}
 
 	@Override
-	public String getName() {
-		return name();
-	}
-	
-	@Override
 	public void load() {
-		MinecraftForge.versionDetect("CompactSolars", 1, 4, 0);
+		MinecraftForge.versionDetect("CompactSolars", 2, 0, 0);
 		proxy=ServerClientProxy.getProxy();
 		if (mod_CompactSolars.instance==null) {
 			mod_CompactSolars.instance=this;
@@ -43,13 +38,13 @@ public class mod_CompactSolars extends NetworkMod {
 			cfg.load();
 			Property block = cfg.getOrCreateBlockIdProperty("compactSolar", 183);
 			block.comment="The block id for the compact solar arrays.";
-			compactSolarBlock = new BlockCompactSolar(Integer.parseInt(block.value));
-			Property scale = cfg.getOrCreateIntProperty("scaleFactor", Configuration.GENERAL_PROPERTY, 1);
+			compactSolarBlock = new BlockCompactSolar(block.getInt(183));
+			Property scale = cfg.getOrCreateIntProperty("scaleFactor", Configuration.CATEGORY_GENERAL, 1);
 			scale.comment="The EU generation scaling factor. " +
 					"The average number of ticks needed to generate one EU packet." +
 					"1 is every tick, 2 is every other tick etc. " +
 					"Each Solar will still generate a whole packet (8, 64, 512 EU).";
-			productionRate = Integer.parseInt(scale.value);
+			productionRate = scale.getInt(1);
 		} catch (Exception e) {
 			ModLoader.getLogger().severe("CompactSolars was unable to load it's configuration successfully");
 			e.printStackTrace(System.err);
