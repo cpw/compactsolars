@@ -6,8 +6,7 @@ import java.util.Map;
 
 import net.minecraft.client.Minecraft;
 import net.minecraft.src.EntityItem;
-import net.minecraft.src.EntityPlayerSP;
-import net.minecraft.src.GuiScreen;
+import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ModLoader;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
@@ -71,7 +70,7 @@ public class ClientProxy implements IProxy, IGuiHandler {
 	}
 
 	@Override
-	public GuiScreen getGuiScreen(int ID, EntityPlayerSP player, World world, int X, int Y, int Z) {
+	public Object getGuiElement(int ID, EntityPlayer player, World world, int X, int Y, int Z) {
 		TileEntity te=world.getBlockTileEntity(X, Y, Z);
 		if (te!=null && te instanceof TileEntityCompactSolar) {
 			TileEntityCompactSolar tecs=(TileEntityCompactSolar) te;

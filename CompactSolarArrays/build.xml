@@ -56,6 +56,7 @@
     <property name="server.src.dir" location="${basedir}/server" />
     <property name="ic2api.src.dir" location="${mcdev.home}/ic2api/src" />
     <property name="resource.dir" location="${basedir}/resources" />
+    <property name="mfuploader.script" location="/home/cpw/mfuploader.py" />
   </target>
   <target name="clean">
     <antcall target="clean-source">
@@ -96,6 +97,22 @@
   </target>
   <target name="build" depends="merge-client,merge-server,build-client,build-server" />
 
+  <target name="uploadartifacts" depends="build,domfupload"/>
+
+  <target name="domfupload" depends="-checkmfupload" if="${mfuploader.can.run}">
+    <property name="uploaddir" value="${modname}-${version}" />
+    <exec executable="/usr/bin/python">
+      	<arg value="${mfuploader.script}"/>
+    	<arg value="${uploaddir}"/>
+	  	<arg value="${basedir}/target/${modname}-client-${version}.zip"/>
+	  	<arg value="${basedir}/target/${modname}-server-${version}.zip"/>
+    </exec>
+  </target>
+  
+  <target name="-checkmfupload" unless="mfuploader.can.run">
+    <available property="mfuploader.can.run" file="${mfuploader.script}"/>
+  </target>
+  
   <target name="buildandclean" depends="build">
     <antcall target="clean" />
   </target>
