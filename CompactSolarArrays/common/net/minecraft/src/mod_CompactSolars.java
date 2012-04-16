@@ -26,7 +26,7 @@ public class mod_CompactSolars extends NetworkMod {
 
 	@Override
 	public void load() {
-		MinecraftForge.versionDetect("CompactSolars", 2, 0, 0);
+		MinecraftForge.versionDetect("CompactSolars", 3, 0, 1);
 		proxy=ServerClientProxy.getProxy();
 		if (mod_CompactSolars.instance==null) {
 			mod_CompactSolars.instance=this;
