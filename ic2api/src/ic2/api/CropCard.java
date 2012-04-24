@@ -1,5 +1,7 @@
 package ic2.api;
 
+import java.util.HashMap;
+
 import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
@@ -96,6 +98,15 @@ public abstract class CropCard
 	 * @return 0-255, representing the sprite index on the crop's spritesheet.
 	 */
 	public abstract int getSpriteIndex(TECrop crop);	
+	
+	/**
+	 * Get the crop's spritesheet.
+	 * Per default crops_0.png of ic2-sprites
+	 * @return Texture file path
+	 */
+	public String getTextureFile() {
+		return "/ic2/sprites/crops_0.png";
+	}
 	
 	/**
 	 * Amount of growth points needed to increase the plant's size.
@@ -276,19 +287,18 @@ public abstract class CropCard
 	public int getEmittedLight(TECrop crop) {return 0;}
 	
 	/**
-	 * Called when an entity collides with the plant.
-	 * Default is true if the entity is an EntityLiving or if it's a player not sneaking.
+	 * Default is true if the entity is an EntityLiving in jumping or sprinting state.
 	 * 
 	 * @param entity entity colliding
 	 * @return Whether trampling calculation should happen, return false if the plant is no longer valid. 
 	 */
 	public boolean onEntityCollision(TECrop crop, Entity entity)
 	{
-		if (entity instanceof EntityPlayer)
+		if (entity instanceof EntityLiving)
 		{
-			return !((EntityPlayer)entity).isSneaking();
+			return ((EntityLiving)entity).motionY < 0 || ((EntityLiving)entity).isSprinting();
 		}
-		return entity instanceof EntityLiving;
+		return false;
 	}
 	
 	
@@ -416,18 +426,48 @@ public abstract class CropCard
 		System.out.println("[IndustrialCraft] Cannot add crop:"+crop.name()+" on ID #"+i+", slot already occupied by crop:"+cropCardList[i].name());
 		return false;
 	}
-	
-	/**
-	 * Get the crop's spritesheet.
-	 * 
-	 * @return Texture file path
-	 */
-	public String getTextureFile() {
-		return "/ic2/sprites/crops_0.png";
-	}
 
 	/**
 	 * For internal usage only.
 	 */
 	public static TECrop nameReference;
+	
+	/**
+	 * Stores all registered baseseeds
+	 */
+	private static HashMap<ItemStack, BaseSeed> baseseeds = new HashMap<ItemStack, BaseSeed>();
+	
+	/**
+	 * Call this method to add a baseseed.
+	 * Baseseeds are ItemStacks (identified by id+damage value), which will create a crop in a CropBlock if rightclicked on an empty cropblock.
+	 * ID of the plant, it's starting size, as well as it's stats are determined by the parameters you specify with calling this method.
+	 * Give an itemstack with damage-value -1 to make the baseseed recognize ALL damage values of the given item id as correct.
+	 * @return false if an itemstack with same id and damage value is known already
+	 */
+	public static boolean registerBaseSeed(ItemStack stack, int id, int size, int growth, int gain, int resistance)
+	{
+		for (ItemStack key : baseseeds.keySet()) 
+			if (key.itemID==stack.itemID && key.getItemDamage()==stack.getItemDamage()) return false;
+		
+		baseseeds.put(stack, new BaseSeed(id, size, growth, gain, resistance, stack.stackSize));
+		return true;
+	}
+	
+	/**
+	 * Searches through the map of all registered baseseeds and returns one, if the given ItemStack is recognized.
+	 * @return fitting BaseSeed or NULL, if there is none
+	 */
+	public static BaseSeed getBaseSeed(ItemStack stack)
+	{
+		if (stack == null) return null;
+		for (ItemStack key : baseseeds.keySet())
+		{
+			if (key.itemID == stack.itemID &&
+					(key.getItemDamage() == -1 || key.getItemDamage() == stack.getItemDamage()))
+			{
+				return baseseeds.get(key);
+			}
+		}
+		return null;
+	}
 }

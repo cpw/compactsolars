@@ -174,9 +174,9 @@ public final class Ic2Recipes {
 	}
 	
 	/**
-	 * Add an item to the Recycler blacklist.
+	 * Add an item stack to the Recycler blacklist.
 	 * 
-	 * @param newBlacklistedItem item to add
+	 * @param newBlacklistedItem item stack to add
 	 */
 	public static void addRecyclerBlacklistItem(ItemStack newBlacklistedItem) {
 		getRecyclerBlacklist().add(newBlacklistedItem);
@@ -213,6 +213,109 @@ public final class Ic2Recipes {
 		}
 		
 		return false;
+	}
+	
+	/**
+	 * Retrieve the registered Scrap Box drops.
+	 * 
+	 * @return Drops as a list of item stack and float (chance) pairs
+	 */
+	public static List<Map.Entry<ItemStack,Float>> getScrapboxDrops() {
+		try {
+			return (List<Map.Entry<ItemStack,Float>>) Class.forName(getPackage() + ".common.ItemScrapbox").getMethod("getDropList").invoke(null);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	/*
+	 * Reference scrap box chance values:
+	 * 
+	 * 0.1: Diamond
+	 * 0.5: Cake, Gold Helmet, Iron Ore, Gold Ore
+	 * 1.0: Wooden tools, Soul Sand, Sign, Leather, Feather, Bone
+	 * 1.5: Apple, Bread
+	 * 2.0: Netherrack, Rotten Flesh
+	 * 3.0: Grass, Gravel
+	 * 4.0: Stick
+	 * 5.0: Dirt, Wooden Hoe
+	 */
+	
+	/**
+	 * Add an item stack to the Scrap Box drops.
+	 * 
+	 * @param dropItem item stack to add
+	 * @param chance chance for the item to drop, see the code comments for reference values
+	 */
+	public static void addScrapboxDrop(ItemStack dropItem, float chance) {
+		try {
+			Class.forName(getPackage() + ".common.ItemScrapbox").getMethod("addDrop", ItemStack.class, float.class).invoke(null, dropItem, chance);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Add an item to the Scrap Box drops.
+	 * 
+	 * @param dropItem item to add
+	 * @param chance chance for the item to drop, see the code comments for reference values
+	 */
+	public static void addScrapboxDrop(Item dropItem, float chance) {
+		addScrapboxDrop(new ItemStack(dropItem), chance);
+	}
+	
+	/**
+	 * Add a block to the Scrap Box drops.
+	 * 
+	 * @param dropItem item to add
+	 * @param chance chance for the item to drop, see the code comments for reference values
+	 */
+	public static void addScrapboxDrop(Block dropItem, float chance) {
+		addScrapboxDrop(new ItemStack(dropItem), chance);
+	}
+	
+	/**
+	 * Retrieve the registered Mass Fabricator amplifiers.
+	 * 
+	 * @return Amplifiers as a list of item stack and integer (amplifier value) pairs
+	 */
+	public static List<Map.Entry<ItemStack,Integer>> getMatterAmplifiers() {
+		try {
+			return (List<Map.Entry<ItemStack,Integer>>) Class.forName(getPackage() + ".common.TileEntityMatter").getField("amplifiers").get(null);
+		} catch (Exception e) {
+			throw new RuntimeException(e);
+		}
+	}
+	
+	/**
+	 * Add an item stack to the Mass Fabricator amplifiers.
+	 * 
+	 * @param amplifierItem item stack to add
+	 * @param value amplifier value for the item, scrap is 5000
+	 */
+	public static void addMatterAmplifier(ItemStack amplifierItem, int value) {
+		getMatterAmplifiers().add(new AbstractMap.SimpleEntry<ItemStack,Integer>(amplifierItem, value));
+	}
+	
+	/**
+	 * Add an item to the Mass Fabricator amplifiers.
+	 * 
+	 * @param amplifierItem item to add
+	 * @param value amplifier value for the item, scrap is 5000
+	 */
+	public static void addMatterAmplifier(Item amplifierItem, int value) {
+		addMatterAmplifier(new ItemStack(amplifierItem), value);
+	}
+	
+	/**
+	 * Add a block to the Mass Fabricator amplifiers.
+	 * 
+	 * @param amplifierItem item to add
+	 * @param value amplifier value for the item, scrap is 5000
+	 */
+	public static void addMatterAmplifier(Block amplifierItem, int value) {
+		addMatterAmplifier(new ItemStack(amplifierItem), value);
 	}
 	
 	/**

@@ -60,6 +60,11 @@ public abstract class TECrop extends TileEntity
 	 * - 11-100 for distilled water (hydration cell) hydration
 	 */
 	public int waterStorage = 0;
+	/**
+	 * Remaining duration of WeedEX
+	 * PRevents weed from growing and protects against (unimplemented) insects or similar stuff
+	 */
+	public int exStorage = 0;
 	
 	/**
 	 * Crop humidity.

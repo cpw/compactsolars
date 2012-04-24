@@ -32,14 +32,15 @@ public final class NetworkHelper {
 	 * network synchronization.
 	 *
 	 * The following field data types are currently supported:
-	 *  - boolean
-	 *  - byte
-	 *  - float
-	 *  - int
-	 *  - int[]
-	 *  - short
-	 *  - short[]
-	 *  - String
+	 *  - int, int[], short, short[], byte, byte[], long, long[]
+	 *  - boolean, boolean[]
+	 *  - String, String[]
+	 *  - ItemStack
+	 *  - NBTBase (includes NBTTagCompound)
+	 *  - Block, Item, Achievement, Potion, Enchantment
+	 *  - ChunkCoordinates, ChunkCoordIntPair
+	 *  - TileEntity (does not sync the actual tile entity, instead looks up the tile entity by its position in the client world)
+	 *  - World (does not sync the actual world, instead looks up the world by its dimension ID)
 	 *
 	 * Once the update has been processed by the client, it'll call onNetworkUpdate on the client-
 	 * side TileEntity if it implements INetworkUpdateListener.

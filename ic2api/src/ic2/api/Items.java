@@ -361,8 +361,6 @@ public final class Items {
 		matter 					UU-Matter item, currently not meta sensitive
 		iridiumOre 				Iridium Ore item, currently not meta sensitive
 		iridiumPlate 			Iridium Plate item, currently not meta sensitive
-		
-		sugarCube	 			Sugar Cube item, currently not meta sensitive
 	
 	upgrade modules
 		overclockerUpgrade		overclocker upgrade item, meta sensitive
@@ -376,9 +374,11 @@ public final class Items {
 		cropSeed 				Crop seeds, stuff stored in NBT, don't use for crafting recipes!
 		cropnalyzer				Cropnalyzer handheld device
 		fertilizer				Basic IC2Item, used to provide nutrients toCropBlocks
-		hydratingCell			Cell used to hydrate Crops, meta = Content, 0= Full, 9999 = Near empty
-		electricHoe				Electric Hoe, Metadata indicates charge level
+		hydratingCell			Cell used to hydrate Crops, meta = Content, 0 = Full, 9999 = Near empty
+		electricHoe				Electric Hoe, meta = charge level
 		solarHelmet				Solar Helmet item, currently not meta sensitive
+		terraWart				Terra Wart item, cures potion effects
+		weedEx					Weed-EX can, meta = uses left
 		
 	*/
 	
