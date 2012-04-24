@@ -1,4 +1,4 @@
-package net.minecraft.src.ic2.api;
+package ic2.api;
 
 /**
  * Tile entities which conduct energy pulses without buffering (mostly cables) have to implement this

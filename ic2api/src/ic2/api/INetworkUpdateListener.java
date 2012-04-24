@@ -1,4 +1,4 @@
-package net.minecraft.src.ic2.api;
+package ic2.api;
 
 /**
  * Allows a tile entity to receive field sync updates received from the server. 

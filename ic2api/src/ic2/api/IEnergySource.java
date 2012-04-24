@@ -1,4 +1,4 @@
-package net.minecraft.src.ic2.api;
+package ic2.api;
 
 /**
  * Allows a tile entity (mostly a generator) to emit energy.

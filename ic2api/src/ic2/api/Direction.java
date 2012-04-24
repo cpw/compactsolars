@@ -1,4 +1,4 @@
-package net.minecraft.src.ic2.api;
+package ic2.api;
 
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;

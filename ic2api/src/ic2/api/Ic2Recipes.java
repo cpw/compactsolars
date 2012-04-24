@@ -1,4 +1,4 @@
-package net.minecraft.src.ic2.api;
+package ic2.api;
 
 import java.lang.reflect.Array;
 import java.util.AbstractMap;
