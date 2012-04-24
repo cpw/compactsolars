@@ -2,7 +2,7 @@ package cpw.mods.compactsolars;
 
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.ModLoader;
-import net.minecraft.src.ic2.api.Items;
+import ic2.api.Items;
 
 public enum CompactSolarType {
 	LV(8, "Low Voltage Solar Array", "lvTransformer", TileEntityCompactSolar.class),

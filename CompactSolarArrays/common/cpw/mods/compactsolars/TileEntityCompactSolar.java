@@ -12,15 +12,15 @@ import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.NBTTagList;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.mod_CompactSolars;
-import net.minecraft.src.ic2.api.Direction;
-import net.minecraft.src.ic2.api.ElectricItem;
-import net.minecraft.src.ic2.api.EnergyNet;
-import net.minecraft.src.ic2.api.IElectricItem;
-import net.minecraft.src.ic2.api.IEnergySource;
-import net.minecraft.src.ic2.api.INetworkDataProvider;
-import net.minecraft.src.ic2.api.INetworkUpdateListener;
-import net.minecraft.src.ic2.api.IWrenchable;
-import net.minecraft.src.ic2.api.NetworkHelper;
+import ic2.api.Direction;
+import ic2.api.ElectricItem;
+import ic2.api.EnergyNet;
+import ic2.api.IElectricItem;
+import ic2.api.IEnergySource;
+import ic2.api.INetworkDataProvider;
+import ic2.api.INetworkUpdateListener;
+import ic2.api.IWrenchable;
+import ic2.api.NetworkHelper;
 
 public class TileEntityCompactSolar extends TileEntity implements IInventory, IEnergySource, INetworkDataProvider, INetworkUpdateListener,
 		IWrenchable {
