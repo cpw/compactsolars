@@ -59,7 +59,7 @@
     <property name="client.src.dir" location="${basedir}/client" />
     <property name="server.src.dir" location="${basedir}/server" />
     <property name="deploy.dir" location="${user.home}/.minecraft/mods" />
-    <property name="ic2api.src.dir" location="${mcdev.home}/ic2api/src" />
+    <property name="ic2api.src.dir" location="${dev.home}/ic2api/src" />
     <property name="resource.dir" location="${basedir}/resources" />
     <condition property="version.build" value="${env.BUILD_NUMBER}" else="1">
       <isset property="env.BUILD_NUMBER" />
