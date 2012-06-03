@@ -38,7 +38,6 @@
     </tstamp>
     <property environment="env" />
     <property file="build.properties" />
-    <property file="compactsolarsversion.properties" />
     <property name="modname" value="mod_compactsolars" />
     <condition property="dev.home" value="${env.WORKSPACE}" else="${default.dev.home}">
       <isset property="env.WORKSPACE" />
