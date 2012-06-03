@@ -15,6 +15,7 @@ import static cpw.mods.compactsolars.Version.*;
 
 public class mod_CompactSolars extends NetworkMod {
 
+  @SidedProxy(clientSide="cpw.mods.compactsolars.client.ClientProxy", serverSide="cpw.mods.compactsolars.server.ServerProxy")
 	public static IProxy proxy;
 	public static BlockCompactSolar compactSolarBlock;
 	public static int productionRate=1;
@@ -26,8 +27,7 @@ public class mod_CompactSolars extends NetworkMod {
 
 	@Override
 	public void load() {
-		MinecraftForge.versionDetect("CompactSolars", 3, 1, 0);
-		proxy=ServerClientProxy.getProxy();
+		MinecraftForge.versionDetect("CompactSolars", 3, 2, 4);
 		if (mod_CompactSolars.instance==null) {
 			mod_CompactSolars.instance=this;
 		}
@@ -61,7 +61,6 @@ public class mod_CompactSolars extends NetworkMod {
 	@Override
 	public void modsLoaded() {
 		CompactSolarType.generateRecipes(compactSolarBlock);
-		ModLoader.getLogger().info(name()+" loaded successfully.");
 	}
 
 	@Override
