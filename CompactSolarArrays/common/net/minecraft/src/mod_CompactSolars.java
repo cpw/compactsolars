@@ -72,4 +72,9 @@ public class mod_CompactSolars extends NetworkMod {
 	public boolean serverSideRequired() {
 		return false;
 	}
+	
+	@Override
+	public String getPriorities() {
+	  return "after:mod_IC2";
+	}
 }
