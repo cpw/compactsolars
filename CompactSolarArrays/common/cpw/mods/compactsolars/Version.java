@@ -25,7 +25,7 @@ private static String mcversion;
 	    major = properties.getProperty("CompactSolars.build.major.number");
 		minor = properties.getProperty("CompactSolars.build.minor.number");
 		rev = properties.getProperty("CompactSolars.build.revision.number");
-		build = properties.getProperty("CompactSolars.build.build.number");
+		build = properties.getProperty("CompactSolars.build.number");
 		mcversion = properties.getProperty("CompactSolars.build.mcversion");
     }
   }

@@ -18,9 +18,9 @@ This significantly reduces the CPU impact of large amounts of Solar Energy gathe
   ],
   "parent":"",
   "requiredMods": [
-    "IC2@[1.106,)"
-    "Forge@[4.1,)"
-    "FML@[3.1.14,)"
+    "IC2@[1.106,)",
+    "Forge@[4.1,)",
+    "FML@[3.1.15,)"
   ],
   "dependencies": [
   	"IC2@[1.106,)"
