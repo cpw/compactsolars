@@ -24,7 +24,9 @@ public final class Items {
 	 */
 	public static ItemStack getItem(String name) {
 		try {
-			Object ret = Class.forName(getPackage() + ".common.Ic2Items").getField(name).get(null);
+			if (Ic2Items == null) Ic2Items = Class.forName(getPackage() + ".common.Ic2Items");
+			
+			Object ret = Ic2Items.getField(name).get(null);
 			
 			if (ret instanceof ItemStack) {
 				return (ItemStack) ret;
@@ -144,6 +146,7 @@ public final class Items {
 	personal blocks
 		personalSafe 			Personal Safe block, meta sensitive
 		tradeOMat 				Trade-O-Mat block, meta sensitive
+		energyOMat 				Energy-O-Mat block, meta sensitive
 	
 	explosives
 		industrialTnt 			Industrial TNT block, currently not meta sensitive
@@ -152,7 +155,7 @@ public final class Items {
 		dynamiteStickWithRemote Dynamite Stick with Remote block, meta = placement, meta in ItemStack set to 0
 	
 	Agriculture Stuff
-		crop Crop Block, empty, not meta sensitive
+		crop 					Crop Block, empty, not meta sensitive
 	
 	
 	----- items -----
@@ -392,5 +395,7 @@ public final class Items {
 		if (pkg != null) return pkg.getName().substring(0, pkg.getName().lastIndexOf('.'));
 		else return "ic2";
 	}
+	
+	private static Class Ic2Items;
 }
 

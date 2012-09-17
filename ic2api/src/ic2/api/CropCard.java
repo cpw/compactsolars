@@ -6,7 +6,6 @@ import net.minecraft.src.Entity;
 import net.minecraft.src.EntityLiving;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 
 /**
  * Base agriculture crop.
@@ -289,6 +288,7 @@ public abstract class CropCard
 	/**
 	 * Default is true if the entity is an EntityLiving in jumping or sprinting state.
 	 * 
+	 * @param crop reference to TECrop
 	 * @param entity entity colliding
 	 * @return Whether trampling calculation should happen, return false if the plant is no longer valid. 
 	 */
@@ -296,7 +296,7 @@ public abstract class CropCard
 	{
 		if (entity instanceof EntityLiving)
 		{
-			return ((EntityLiving)entity).motionY < 0 || ((EntityLiving)entity).isSprinting();
+			return ((EntityLiving)entity).isSprinting();
 		}
 		return false;
 	}
@@ -340,13 +340,13 @@ public abstract class CropCard
 		return -1;
 	}
 	
-	
-	/**
-	 * Private storage location for all registered CropCards.
-	 * Access via registerCrop() or getCrop().
-	 */
 	private static final CropCard[] cropCardList = new CropCard[256];
 	
+	/**
+	 * Get the size of the plant list. 
+	 * 
+	 * @return Plant list size
+	 */
 	public static int cropCardListLength() {return cropCardList.length;}
 	
 	/**
@@ -432,17 +432,18 @@ public abstract class CropCard
 	 */
 	public static TECrop nameReference;
 	
-	/**
-	 * Stores all registered baseseeds
-	 */
 	private static HashMap<ItemStack, BaseSeed> baseseeds = new HashMap<ItemStack, BaseSeed>();
 	
 	/**
-	 * Call this method to add a baseseed.
-	 * Baseseeds are ItemStacks (identified by id+damage value), which will create a crop in a CropBlock if rightclicked on an empty cropblock.
-	 * ID of the plant, it's starting size, as well as it's stats are determined by the parameters you specify with calling this method.
-	 * Give an itemstack with damage-value -1 to make the baseseed recognize ALL damage values of the given item id as correct.
-	 * @return false if an itemstack with same id and damage value is known already
+	 * Registers a base seed, an item used to plant a crop.
+	 * 
+	 * @param stack item
+	 * @param id plant ID
+	 * @param size initial size
+	 * @param growth initial growth stat
+	 * @param gain initial gain stat
+	 * @param resistance initial resistance stat
+	 * @return True if successful
 	 */
 	public static boolean registerBaseSeed(ItemStack stack, int id, int size, int growth, int gain, int resistance)
 	{
@@ -454,8 +455,9 @@ public abstract class CropCard
 	}
 	
 	/**
-	 * Searches through the map of all registered baseseeds and returns one, if the given ItemStack is recognized.
-	 * @return fitting BaseSeed or NULL, if there is none
+	 * Finds a base seed from the given item.
+	 * 
+	 * @return Base seed or null if none found
 	 */
 	public static BaseSeed getBaseSeed(ItemStack stack)
 	{

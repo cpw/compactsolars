@@ -4,16 +4,20 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     cpw - initial API and implementation
  ******************************************************************************/
 package cpw.mods.compactsolars;
 
-import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
+import cpw.mods.fml.common.Side;
+import cpw.mods.fml.common.asm.SideOnly;
+
 import net.minecraft.src.BlockContainer;
+import net.minecraft.src.CreativeTabs;
 import net.minecraft.src.EntityItem;
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.IBlockAccess;
@@ -22,10 +26,8 @@ import net.minecraft.src.Material;
 import net.minecraft.src.NBTTagCompound;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraft.src.mod_CompactSolars;
-import net.minecraft.src.forge.ITextureProvider;
 
-public class BlockCompactSolar extends BlockContainer implements ITextureProvider {
+public class BlockCompactSolar extends BlockContainer {
 	private Random random;
 
 	public BlockCompactSolar(int blockId) {
@@ -34,17 +36,20 @@ public class BlockCompactSolar extends BlockContainer implements ITextureProvide
 		setHardness(3.0F);
 		random=new Random();
 		setRequiresSelfNotify();
+		setCreativeTab(CreativeTabs.tabRedstone);
 	}
+
 	@Override
-	public TileEntity getBlockEntity() {
+	public TileEntity createNewTileEntity(World var1) {
 		return null;
 	}
 
 	@Override
-	public TileEntity getBlockEntity(int md) {
-		return CompactSolarType.makeEntity(md);
+	public TileEntity createNewTileEntity(World world, int metadata) {
+		return CompactSolarType.makeEntity(metadata);
 	}
-	
+
+	@Override
 	public int getBlockTexture(IBlockAccess worldAccess, int i, int j, int k, int l) {
 		int meta=worldAccess.getBlockMetadata(i, j, k);
 		CompactSolarType type=CompactSolarType.values()[meta];
@@ -52,7 +57,7 @@ public class BlockCompactSolar extends BlockContainer implements ITextureProvide
 			return type.getTextureRow()*16+1;		// Top
 		} else if (l==0) {
 			return type.getTextureRow()*16+2;		// Bottom
-		} else { 											
+		} else {
 			return type.getTextureRow()*16;			// Sides
 		}
 	}
@@ -75,35 +80,37 @@ public class BlockCompactSolar extends BlockContainer implements ITextureProvide
 	}
 
 	@Override
-	public boolean blockActivated(World world, int i, int j, int k, EntityPlayer player) {
+	public boolean onBlockActivated(World world, int i, int j, int k, EntityPlayer player, int s, float f1, float f2, float f3) {
         if (player.isSneaking())
         {
             return false;
         }
-        
+
         if (world.isRemote) {
         	return true;
         }
-        
+
 		TileEntity te = world.getBlockTileEntity(i, j, k);
 		if (te!=null && te instanceof TileEntityCompactSolar) {
 			TileEntityCompactSolar tecs = (TileEntityCompactSolar) te;
-			player.openGui(mod_CompactSolars.instance, tecs.getType().ordinal(), world, i, j, k);
+			player.openGui(CompactSolars.instance, tecs.getType().ordinal(), world, i, j, k);
 		}
 		return true;
 	}
-	
+
+	@Override
 	protected int damageDropped(int i) {
 		return i;
 	}
-	public void onBlockRemoval(World world, int i, int j, int k)
-	{
+
+	@Override
+	public void breakBlock(World world, int i, int j, int k, int par5, int par6) {
 	    TileEntityCompactSolar tileSolar = (TileEntityCompactSolar)world.getBlockTileEntity(i, j, k);
 	    if (tileSolar != null)
 	    {
 	    	dropContent(0, tileSolar, world);
 	    }
-	    super.onBlockRemoval(world, i, j, k);
+	    super.breakBlock(world, i, j, k, par5, par6);
 	}
 
 	public void dropContent(int newSize, TileEntityCompactSolar tileSolar, World world) {
@@ -132,7 +139,7 @@ public class BlockCompactSolar extends BlockContainer implements ITextureProvide
                 entityitem.motionZ = (float)random.nextGaussian() * f3;
                 if (itemstack.hasTagCompound())
                 {
-                	mod_CompactSolars.proxy.applyExtraDataToDrops(entityitem, (NBTTagCompound)itemstack.getTagCompound().copy());
+                	entityitem.item.setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
                 }
                 world.spawnEntityInWorld(entityitem);
             }
@@ -141,10 +148,10 @@ public class BlockCompactSolar extends BlockContainer implements ITextureProvide
 
 	@SuppressWarnings({ "unchecked", "rawtypes" })
 	@Override
-	public void addCreativeItems(ArrayList itemList) {
+	@SideOnly(Side.CLIENT)
+	public void getSubBlocks(int par1, CreativeTabs par2CreativeTabs, List itemList) {
 		for (CompactSolarType type : CompactSolarType.values()) {
 			itemList.add(new ItemStack(this,1,type.ordinal()));
 		}
-		
 	}
 }

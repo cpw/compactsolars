@@ -10,6 +10,7 @@ public interface IWrenchable {
 	 * Determine if the wrench can be used to set the block's facing.
 	 * Called before wrenchCanRemove().
 	 * 
+	 * @param entityPlayer player using the wrench
 	 * @param side block's side the wrench was clicked on
 	 * @return Whether the wrenching was done and the wrench should be damaged 
 	 */

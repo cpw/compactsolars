@@ -1,5 +1,7 @@
 package ic2.api;
 
+import java.lang.reflect.Method;
+
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
 
@@ -15,7 +17,9 @@ public final class EnergyNet {
 	 */
 	public static EnergyNet getForWorld(World world) {
 		try {
-			return new EnergyNet(Class.forName(getPackage() + ".common.EnergyNet").getMethod("getForWorld", World.class).invoke(null, world));
+			if (EnergyNet_getForWorld == null) EnergyNet_getForWorld = Class.forName(getPackage() + ".common.EnergyNet").getMethod("getForWorld", World.class);
+			
+			return new EnergyNet(EnergyNet_getForWorld.invoke(null, world));
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -33,7 +37,9 @@ public final class EnergyNet {
 	 */
 	public void addTileEntity(TileEntity addedTileEntity) {
 		try {
-			Class.forName(getPackage() + ".common.EnergyNet").getMethod("addTileEntity", TileEntity.class).invoke(energyNetInstance, addedTileEntity);
+			if (EnergyNet_addTileEntity == null) EnergyNet_addTileEntity = Class.forName(getPackage() + ".common.EnergyNet").getMethod("addTileEntity", TileEntity.class);
+			
+			EnergyNet_addTileEntity.invoke(energyNetInstance, addedTileEntity);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -47,7 +53,9 @@ public final class EnergyNet {
 	 */
 	public void removeTileEntity(TileEntity removedTileEntity) {
 		try {
-			Class.forName(getPackage() + ".common.EnergyNet").getMethod("removeTileEntity", TileEntity.class).invoke(energyNetInstance, removedTileEntity);
+			if (EnergyNet_removeTileEntity == null) EnergyNet_removeTileEntity = Class.forName(getPackage() + ".common.EnergyNet").getMethod("removeTileEntity", TileEntity.class);
+			
+			EnergyNet_removeTileEntity.invoke(energyNetInstance, removedTileEntity);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -62,7 +70,9 @@ public final class EnergyNet {
 	 */
 	public int emitEnergyFrom(IEnergySource energySource, int amount) {
 		try {
-			return ((Integer) Class.forName(getPackage() + ".common.EnergyNet").getMethod("emitEnergyFrom", IEnergySource.class, Integer.TYPE).invoke(energyNetInstance, energySource, amount)).intValue();
+			if (EnergyNet_emitEnergyFrom == null) EnergyNet_emitEnergyFrom = Class.forName(getPackage() + ".common.EnergyNet").getMethod("emitEnergyFrom", IEnergySource.class, Integer.TYPE);
+			
+			return ((Integer) EnergyNet_emitEnergyFrom.invoke(energyNetInstance, energySource, amount)).intValue();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -76,7 +86,9 @@ public final class EnergyNet {
 	 */
 	public long getTotalEnergyConducted(TileEntity tileEntity) {
 		try {
-			return ((Long) Class.forName(getPackage() + ".common.EnergyNet").getMethod("getTotalEnergyConducted", TileEntity.class).invoke(energyNetInstance, tileEntity)).longValue();
+			if (EnergyNet_getTotalEnergyConducted == null) EnergyNet_getTotalEnergyConducted = Class.forName(getPackage() + ".common.EnergyNet").getMethod("getTotalEnergyConducted", TileEntity.class);
+			
+			return ((Long) EnergyNet_getTotalEnergyConducted.invoke(energyNetInstance, tileEntity)).longValue();
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -93,6 +105,15 @@ public final class EnergyNet {
 		else return "ic2";
 	}
 	
+	/**
+	 * Instance of the energy network.
+	 */
 	Object energyNetInstance;
+	
+	private static Method EnergyNet_getForWorld;
+	private static Method EnergyNet_addTileEntity;
+	private static Method EnergyNet_removeTileEntity;
+	private static Method EnergyNet_emitEnergyFrom;
+	private static Method EnergyNet_getTotalEnergyConducted;
 }
 

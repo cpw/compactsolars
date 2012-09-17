@@ -4,14 +4,16 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     cpw - initial API and implementation
  ******************************************************************************/
 package cpw.mods.compactsolars;
 
+import com.google.common.base.Throwables;
+
+import cpw.mods.fml.common.registry.GameRegistry;
 import net.minecraft.src.ItemStack;
-import net.minecraft.src.ModLoader;
 import ic2.api.Items;
 
 public enum CompactSolarType {
@@ -30,7 +32,7 @@ public enum CompactSolarType {
 		this.transformerName=transformerName;
 		this.clazz=clazz;
 	}
-	
+
 	public static void generateRecipes(BlockCompactSolar block) {
 		ItemStack solar=Items.getItem("solarPanel");
 		ItemStack parent=solar;
@@ -43,33 +45,28 @@ public enum CompactSolarType {
 	}
 
 	private static void addRecipe(ItemStack target, Object... args) {
-		ModLoader.addRecipe(target, args);
+		GameRegistry.addRecipe(target, args);
 	}
 	public int getOutput() {
 		return output;
 	}
-	
+
 	public static TileEntityCompactSolar makeEntity(int metadata) {
 		int solartype = metadata;
 		try {
 			TileEntityCompactSolar te = values()[solartype].clazz.newInstance();
 			return te;
-		} catch (InstantiationException e) {
-			// unpossible
-			e.printStackTrace();
-		} catch (IllegalAccessException e) {
-			// unpossible
-			e.printStackTrace();
+		} catch (Exception e) {
+			throw Throwables.propagate(e);
 		}
-		return null;
 	}
 
 	public int getTextureRow() {
 		return ordinal();
 	}
 
-	public String[] tileEntityNames() {
-		return new String[] { "CompactSolarType."+name(), name(), name()+" Solar Array" };
+	public String tileEntityName() {
+		return "CompactSolarType."+name();
 	}
 
 }

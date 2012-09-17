@@ -1,5 +1,7 @@
 package ic2.api;
 
+import java.lang.reflect.Method;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 
@@ -22,7 +24,9 @@ public final class ElectricItem {
 	 */
 	public static int charge(ItemStack itemStack, int amount, int tier, boolean ignoreTransferLimit, boolean simulate) {
 		try {
-			return (Integer) Class.forName(getPackage() + ".common.ElectricItem").getMethod("charge", ItemStack.class, Integer.TYPE, Integer.TYPE, Boolean.TYPE, Boolean.TYPE).invoke(null, itemStack, amount, tier, ignoreTransferLimit, simulate);
+			if (ElectricItem_charge == null) ElectricItem_charge = Class.forName(getPackage() + ".common.ElectricItem").getMethod("charge", ItemStack.class, Integer.TYPE, Integer.TYPE, Boolean.TYPE, Boolean.TYPE);
+			
+			return (Integer) ElectricItem_charge.invoke(null, itemStack, amount, tier, ignoreTransferLimit, simulate);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -40,7 +44,9 @@ public final class ElectricItem {
 	 */
 	public static int discharge(ItemStack itemStack, int amount, int tier, boolean ignoreTransferLimit, boolean simulate) {
 		try {
-			return (Integer) Class.forName(getPackage() + ".common.ElectricItem").getMethod("discharge", ItemStack.class, Integer.TYPE, Integer.TYPE, Boolean.TYPE, Boolean.TYPE).invoke(null, itemStack, amount, tier, ignoreTransferLimit, simulate);
+			if (ElectricItem_discharge == null) ElectricItem_discharge = Class.forName(getPackage() + ".common.ElectricItem").getMethod("discharge", ItemStack.class, Integer.TYPE, Integer.TYPE, Boolean.TYPE, Boolean.TYPE);
+			
+			return (Integer) ElectricItem_discharge.invoke(null, itemStack, amount, tier, ignoreTransferLimit, simulate);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -57,7 +63,9 @@ public final class ElectricItem {
 	 */
 	public static boolean canUse(ItemStack itemStack, int amount) {
 		try {
-			return (Boolean) Class.forName(getPackage() + ".common.ElectricItem").getMethod("canUse", ItemStack.class, Integer.TYPE).invoke(null, itemStack, amount);
+			if (ElectricItem_canUse == null) ElectricItem_canUse = Class.forName(getPackage() + ".common.ElectricItem").getMethod("canUse", ItemStack.class, Integer.TYPE);
+			
+			return (Boolean) ElectricItem_canUse.invoke(null, itemStack, amount);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -74,7 +82,9 @@ public final class ElectricItem {
 	 */
 	public static boolean use(ItemStack itemStack, int amount, EntityPlayer player) {
 		try {
-			return (Boolean) Class.forName(getPackage() + ".common.ElectricItem").getMethod("use", ItemStack.class, Integer.TYPE, EntityPlayer.class).invoke(null, itemStack, amount, player);
+			if (ElectricItem_use == null) ElectricItem_use = Class.forName(getPackage() + ".common.ElectricItem").getMethod("use", ItemStack.class, Integer.TYPE, EntityPlayer.class);
+			
+			return (Boolean) ElectricItem_use.invoke(null, itemStack, amount, player);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -90,7 +100,9 @@ public final class ElectricItem {
 	 */
 	public static void chargeFromArmor(ItemStack itemStack, EntityPlayer player) {
 		try {
-			Class.forName(getPackage() + ".common.ElectricItem").getMethod("chargeFromArmor", ItemStack.class, EntityPlayer.class).invoke(null, itemStack, player);
+			if (ElectricItem_chargeFromArmor == null) ElectricItem_chargeFromArmor = Class.forName(getPackage() + ".common.ElectricItem").getMethod("chargeFromArmor", ItemStack.class, EntityPlayer.class);
+			
+			ElectricItem_chargeFromArmor.invoke(null, itemStack, player);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -106,5 +118,11 @@ public final class ElectricItem {
 		if (pkg != null) return pkg.getName().substring(0, pkg.getName().lastIndexOf('.'));
 		else return "ic2";
 	}
+	
+	private static Method ElectricItem_charge;
+	private static Method ElectricItem_discharge;
+	private static Method ElectricItem_canUse;
+	private static Method ElectricItem_use;
+	private static Method ElectricItem_chargeFromArmor;
 }
 

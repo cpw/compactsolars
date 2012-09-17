@@ -8,35 +8,35 @@
  * Contributors:
  *     cpw - initial API and implementation
  ******************************************************************************/
-package cpw.mods.compactsolars.client;
+package cpw.mods.compactsolars;
 
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.TileEntity;
 import net.minecraft.src.World;
-import net.minecraftforge.client.MinecraftForgeClient;
-import cpw.mods.compactsolars.CommonProxy;
-import cpw.mods.compactsolars.TileEntityCompactSolar;
+import cpw.mods.fml.common.network.IGuiHandler;
 
-public class ClientProxy extends CommonProxy {
-	@Override
+public class CommonProxy implements IGuiHandler {
 	public void registerTileEntityRenderers() {
 		// NOOP for now
 	}
 
-	@Override
 	public void registerRenderInformation() {
-		MinecraftForgeClient.preloadTexture("/cpw/mods/compactsolars/sprites/block_textures.png");
+		// NOOP on server
 	}
 
 	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int X, int Y, int Z) {
+	public Object getServerGuiElement(int ID, EntityPlayer player, World world, int X, int Y, int Z) {
 		TileEntity te=world.getBlockTileEntity(X, Y, Z);
 		if (te!=null && te instanceof TileEntityCompactSolar) {
-			TileEntityCompactSolar tecs=(TileEntityCompactSolar) te;
-			return GUISolar.GUI.buildGUI(tecs.getType(), player.inventory, tecs);
+			TileEntityCompactSolar tecs = (TileEntityCompactSolar) te;
+			return new ContainerCompactSolar(player.inventory, tecs, tecs.getType());
 		} else {
 			return null;
 		}
 	}
 
+	@Override
+	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int X, int Y, int Z) {
+		return null;
+	}
 }

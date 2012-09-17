@@ -3,7 +3,7 @@
 	<classpathentry kind="src" path="common"/>
 	<classpathentry kind="src" path="client"/>
 	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER"/>
-	<classpathentry combineaccessrules="false" kind="src" path="/forge-client"/>
 	<classpathentry combineaccessrules="false" kind="src" path="/ic2api"/>
+	<classpathentry combineaccessrules="false" kind="src" path="/forge"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>

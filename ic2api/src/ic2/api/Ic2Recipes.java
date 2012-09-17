@@ -45,11 +45,15 @@ public final class Ic2Recipes {
 	 * @return Recipe list as a list of map entries, the key is the input and the value is the output
 	 */
 	public static List<Map.Entry<ItemStack, ItemStack> > getCompressorRecipes() {
-		try {
-			return (List<Map.Entry<ItemStack, ItemStack> >) Class.forName(getPackage() + ".common.TileEntityCompressor").getField("recipes").get(null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		if (TileEntityCompressor_recipes == null) {
+			try {
+				TileEntityCompressor_recipes = (List<Map.Entry<ItemStack, ItemStack> >) Class.forName(getPackage() + ".common.TileEntityCompressor").getField("recipes").get(null);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
+		
+		return TileEntityCompressor_recipes;
 	}
 	
 	/**
@@ -80,11 +84,15 @@ public final class Ic2Recipes {
 	 * @return Recipe list as a list of map entries, the key is the input and the value is the output
 	 */
 	public static List<Map.Entry<ItemStack, ItemStack> > getExtractorRecipes() {
-		try {
-			return (List<Map.Entry<ItemStack, ItemStack> >) Class.forName(getPackage() + ".common.TileEntityExtractor").getField("recipes").get(null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		if (TileEntityExtractor_recipes == null) {
+			try {
+				TileEntityExtractor_recipes = (List<Map.Entry<ItemStack, ItemStack> >) Class.forName(getPackage() + ".common.TileEntityExtractor").getField("recipes").get(null);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
+		
+		return TileEntityExtractor_recipes;
 	}
 	
 	/**
@@ -115,11 +123,15 @@ public final class Ic2Recipes {
 	 * @return Recipe list as a list of map entries, the key is the input and the value is the output
 	 */
 	public static List<Map.Entry<ItemStack, ItemStack> > getMaceratorRecipes() {
-		try {
-			return (List<Map.Entry<ItemStack, ItemStack> >) Class.forName(getPackage() + ".common.TileEntityMacerator").getField("recipes").get(null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		if (TileEntityMacerator_recipes == null) {
+			try {
+				TileEntityMacerator_recipes = (List<Map.Entry<ItemStack, ItemStack> >) Class.forName(getPackage() + ".common.TileEntityMacerator").getField("recipes").get(null);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
+		
+		return TileEntityMacerator_recipes;
 	}
 	
 	/**
@@ -166,11 +178,15 @@ public final class Ic2Recipes {
 	 * @return Blacklist
 	 */
 	public static List<ItemStack> getRecyclerBlacklist() {
-		try {
-			return (List<ItemStack>) Class.forName(getPackage() + ".common.TileEntityRecycler").getField("blacklist").get(null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+		if (TileEntityRecycler_blacklist == null) {
+			try {
+				TileEntityRecycler_blacklist = (List<ItemStack>) Class.forName(getPackage() + ".common.TileEntityRecycler").getField("blacklist").get(null);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
+		
+		return TileEntityRecycler_blacklist;
 	}
 	
 	/**
@@ -188,7 +204,7 @@ public final class Ic2Recipes {
 	 * @param newBlacklistedItem item to add
 	 */
 	public static void addRecyclerBlacklistItem(Item newBlacklistedItem) {
-		addRecyclerBlacklistItem(new ItemStack(newBlacklistedItem));
+		addRecyclerBlacklistItem(new ItemStack(newBlacklistedItem, 1, -1));
 	}
 	
 	/**
@@ -197,7 +213,7 @@ public final class Ic2Recipes {
 	 * @param newBlacklistedBlock block to add
 	 */
 	public static void addRecyclerBlacklistItem(Block newBlacklistedBlock) {
-		addRecyclerBlacklistItem(new ItemStack(newBlacklistedBlock));
+		addRecyclerBlacklistItem(new ItemStack(newBlacklistedBlock, 1, -1));
 	}
 	
 	
@@ -262,7 +278,7 @@ public final class Ic2Recipes {
 	 * @param chance chance for the item to drop, see the code comments for reference values
 	 */
 	public static void addScrapboxDrop(Item dropItem, float chance) {
-		addScrapboxDrop(new ItemStack(dropItem), chance);
+		addScrapboxDrop(new ItemStack(dropItem, 1), chance);
 	}
 	
 	/**
@@ -280,12 +296,16 @@ public final class Ic2Recipes {
 	 * 
 	 * @return Amplifiers as a list of item stack and integer (amplifier value) pairs
 	 */
-	public static List<Map.Entry<ItemStack,Integer>> getMatterAmplifiers() {
-		try {
-			return (List<Map.Entry<ItemStack,Integer>>) Class.forName(getPackage() + ".common.TileEntityMatter").getField("amplifiers").get(null);
-		} catch (Exception e) {
-			throw new RuntimeException(e);
+	public static List<Map.Entry<ItemStack, Integer> > getMatterAmplifiers() {
+		if (TileEntityMatter_amplifiers == null) {
+			try {
+				TileEntityMatter_amplifiers = (List<Map.Entry<ItemStack, Integer> >) Class.forName(getPackage() + ".common.TileEntityMatter").getField("amplifiers").get(null);
+			} catch (Exception e) {
+				throw new RuntimeException(e);
+			}
 		}
+		
+		return TileEntityMatter_amplifiers;
 	}
 	
 	/**
@@ -305,7 +325,7 @@ public final class Ic2Recipes {
 	 * @param value amplifier value for the item, scrap is 5000
 	 */
 	public static void addMatterAmplifier(Item amplifierItem, int value) {
-		addMatterAmplifier(new ItemStack(amplifierItem), value);
+		addMatterAmplifier(new ItemStack(amplifierItem, 1, -1), value);
 	}
 	
 	/**
@@ -315,7 +335,7 @@ public final class Ic2Recipes {
 	 * @param value amplifier value for the item, scrap is 5000
 	 */
 	public static void addMatterAmplifier(Block amplifierItem, int value) {
-		addMatterAmplifier(new ItemStack(amplifierItem), value);
+		addMatterAmplifier(new ItemStack(amplifierItem, 1, -1), value);
 	}
 	
 	/**
@@ -328,5 +348,11 @@ public final class Ic2Recipes {
 		if (pkg != null) return pkg.getName().substring(0, pkg.getName().lastIndexOf('.'));
 		else return "ic2";
 	}
+	
+	private static List<Map.Entry<ItemStack, ItemStack> > TileEntityCompressor_recipes;
+	private static List<Map.Entry<ItemStack, ItemStack> > TileEntityExtractor_recipes;
+	private static List<Map.Entry<ItemStack, ItemStack> > TileEntityMacerator_recipes;
+	private static List<ItemStack> TileEntityRecycler_blacklist;
+	private static List<Map.Entry<ItemStack, Integer> > TileEntityMatter_amplifiers;
 }
 

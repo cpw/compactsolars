@@ -1,7 +1,7 @@
 package ic2.api;
 
 import net.minecraft.src.TileEntity;
-import net.minecraft.src.World;
+import net.minecraftforge.common.ForgeDirection;
 
 /**
  * Represents the 6 possible directions along the axis of a block.
@@ -95,6 +95,10 @@ public enum Direction {
 	 */
 	private int getSign() {
 		return (dir % 2) * 2 - 1;
+	}
+	
+	public ForgeDirection toForgeDirection() {
+		return ForgeDirection.getOrientation(toSideValue());
 	}
 	
 	private int dir;

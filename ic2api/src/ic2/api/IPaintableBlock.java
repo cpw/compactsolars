@@ -1,6 +1,5 @@
 package ic2.api;
 
-import net.minecraft.src.IBlockAccess;
 import net.minecraft.src.World;
 
 /**

@@ -1,5 +1,7 @@
 package ic2.api;
 
+import java.lang.reflect.Method;
+
 import net.minecraft.src.EntityPlayer;
 import net.minecraft.src.ItemStack;
 import net.minecraft.src.TileEntity;
@@ -33,6 +35,7 @@ public final class NetworkHelper {
 	 *
 	 * The following field data types are currently supported:
 	 *  - int, int[], short, short[], byte, byte[], long, long[]
+	 *  - float, float[], double, double[]
 	 *  - boolean, boolean[]
 	 *  - String, String[]
 	 *  - ItemStack
@@ -53,7 +56,10 @@ public final class NetworkHelper {
 	 */
 	public static void updateTileEntityField(TileEntity te, String field) {
 		try {
-			Class.forName(getPackage() + ".platform.NetworkManager").getMethod("updateTileEntityField", TileEntity.class, String.class).invoke(null, te, field);
+			if (NetworkManager_updateTileEntityField == null) NetworkManager_updateTileEntityField = Class.forName(getPackage() + ".common.NetworkManager").getMethod("updateTileEntityField", TileEntity.class, String.class);
+			if (instance == null) instance = getInstance();
+			
+			NetworkManager_updateTileEntityField.invoke(instance, te, field);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -72,7 +78,10 @@ public final class NetworkHelper {
 	 */
 	public static void initiateTileEntityEvent(TileEntity te, int event, boolean limitRange) {
 		try {
-			Class.forName(getPackage() + ".platform.NetworkManager").getMethod("initiateTileEntityEvent", TileEntity.class, Integer.TYPE, Boolean.TYPE).invoke(null, te, event, limitRange);
+			if (NetworkManager_initiateTileEntityEvent == null) NetworkManager_initiateTileEntityEvent = Class.forName(getPackage() + ".common.NetworkManager").getMethod("initiateTileEntityEvent", TileEntity.class, Integer.TYPE, Boolean.TYPE);
+			if (instance == null) instance = getInstance();
+			
+			NetworkManager_initiateTileEntityEvent.invoke(null, te, event, limitRange);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -94,7 +103,10 @@ public final class NetworkHelper {
 	 */
 	public static void initiateItemEvent(EntityPlayer player, ItemStack itemStack, int event, boolean limitRange) {
 		try {
-			Class.forName(getPackage() + ".platform.NetworkManager").getMethod("initiateItemEvent", EntityPlayer.class, ItemStack.class, Integer.TYPE, Boolean.TYPE).invoke(null, player, itemStack, event, limitRange);
+			if (NetworkManager_initiateItemEvent == null) NetworkManager_initiateItemEvent = Class.forName(getPackage() + ".common.NetworkManager").getMethod("initiateItemEvent", EntityPlayer.class, ItemStack.class, Integer.TYPE, Boolean.TYPE);
+			if (instance == null) instance = getInstance();
+			
+			NetworkManager_initiateItemEvent.invoke(instance, player, itemStack, event, limitRange);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -113,7 +125,9 @@ public final class NetworkHelper {
 	 */
 	public static void announceBlockUpdate(World world, int x, int y, int z) {
 		try {
-			Class.forName(getPackage() + ".platform.NetworkManager").getMethod("announceBlockUpdate", World.class, Integer.TYPE, Integer.TYPE, Integer.TYPE).invoke(null, world, x, y, z);
+			if (NetworkManager_announceBlockUpdate == null) NetworkManager_announceBlockUpdate = Class.forName(getPackage() + ".common.NetworkManager").getMethod("announceBlockUpdate", World.class, Integer.TYPE, Integer.TYPE, Integer.TYPE);
+			
+			NetworkManager_announceBlockUpdate.invoke(null, world, x, y, z);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -137,7 +151,10 @@ public final class NetworkHelper {
 	 */	
 	public static void requestInitialData(INetworkDataProvider dataProvider) {
 		try {
-			Class.forName(getPackage() + ".platform.NetworkManager").getMethod("requestInitialData", INetworkDataProvider.class).invoke(null, dataProvider);
+			if (NetworkManager_requestInitialData == null) NetworkManager_requestInitialData = Class.forName(getPackage() + ".common.NetworkManager").getMethod("requestInitialData", INetworkDataProvider.class);
+			if (instance == null) instance = getInstance();
+			
+			NetworkManager_requestInitialData.invoke(instance, dataProvider);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -153,7 +170,10 @@ public final class NetworkHelper {
 	 */
 	public static void initiateClientTileEntityEvent(TileEntity te, int event) {
 		try {
-			Class.forName(getPackage() + ".platform.NetworkManager").getMethod("initiateClientTileEntityEvent", TileEntity.class, Integer.TYPE).invoke(null, te, event);
+			if (NetworkManager_initiateClientTileEntityEvent == null) NetworkManager_initiateClientTileEntityEvent = Class.forName(getPackage() + ".common.NetworkManager").getMethod("initiateClientTileEntityEvent", TileEntity.class, Integer.TYPE);
+			if (instance == null) instance = getInstance();
+			
+			NetworkManager_initiateClientTileEntityEvent.invoke(instance, te, event);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -171,7 +191,10 @@ public final class NetworkHelper {
 	 */
 	public static void initiateClientItemEvent(ItemStack itemStack, int event) {
 		try {
-			Class.forName(getPackage() + ".platform.NetworkManager").getMethod("initiateClientItemEvent", ItemStack.class, Integer.TYPE).invoke(null, itemStack, event);
+			if (NetworkManager_initiateClientItemEvent == null) NetworkManager_initiateClientItemEvent = Class.forName(getPackage() + ".common.NetworkManager").getMethod("initiateClientItemEvent", ItemStack.class, Integer.TYPE);
+			if (instance == null) instance = getInstance();
+			
+			NetworkManager_initiateClientItemEvent.invoke(instance, itemStack, event);
 		} catch (Exception e) {
 			throw new RuntimeException(e);
 		}
@@ -187,5 +210,27 @@ public final class NetworkHelper {
 		if (pkg != null) return pkg.getName().substring(0, pkg.getName().lastIndexOf('.'));
 		else return "ic2";
 	}
+	
+	/**
+	 * Get the NetworkManager instance, used internally.
+	 * 
+	 * @return NetworkManager instance
+	 */
+	private static Object getInstance() {
+		try {
+			return Class.forName(getPackage() + ".common.IC2").getDeclaredField("network").get(null);
+		} catch (Throwable e) {
+			throw new RuntimeException(e);
+		}
+	}
+
+	private static Object instance;
+	private static Method NetworkManager_updateTileEntityField;
+	private static Method NetworkManager_initiateTileEntityEvent;
+	private static Method NetworkManager_initiateItemEvent;
+	private static Method NetworkManager_announceBlockUpdate;
+	private static Method NetworkManager_requestInitialData;
+	private static Method NetworkManager_initiateClientTileEntityEvent;
+	private static Method NetworkManager_initiateClientItemEvent;
 }
 

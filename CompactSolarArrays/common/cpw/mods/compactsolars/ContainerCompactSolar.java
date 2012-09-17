@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     cpw - initial API and implementation
  ******************************************************************************/
@@ -33,18 +33,18 @@ public class ContainerCompactSolar extends Container {
 	}
 
 	private void layoutContainer(IInventory playerInventory, IInventory inventory, CompactSolarType type) {
-		addSlot(new Slot(inventory, 0, 80, 26));
+		addSlotToContainer(new Slot(inventory, 0, 80, 26));
 		for (int inventoryRow = 0; inventoryRow < 3; inventoryRow++)
 		{
 			for (int inventoryColumn = 0; inventoryColumn < 9; inventoryColumn++)
 			{
-				addSlot(new Slot(playerInventory, inventoryColumn + inventoryRow * 9 + 9, 8 + inventoryColumn * 18, 84 + inventoryRow * 18));
+				addSlotToContainer(new Slot(playerInventory, inventoryColumn + inventoryRow * 9 + 9, 8 + inventoryColumn * 18, 84 + inventoryRow * 18));
 			}
 		}
 
 		for (int hotbarSlot = 0; hotbarSlot < 9; hotbarSlot++)
 		{
-			addSlot(new Slot(playerInventory, hotbarSlot, 8 + hotbarSlot * 18, 142));
+			addSlotToContainer(new Slot(playerInventory, hotbarSlot, 8 + hotbarSlot * 18, 142));
 		}
 
 	}
@@ -129,9 +129,5 @@ public class ContainerCompactSolar extends Container {
 	}
 	public EntityPlayer getPlayer() {
 		return myPlayer;
-	}
-	
-	public IInventory getInventory() {
-		return tile;
 	}
 }

@@ -35,12 +35,12 @@ def main():
       print("Git not found")
       vers="v1.0-0-deadbeef"
     (major,minor,rev,githash)=re.match("v(\d+).(\d+)-(\d+)-(.*)",vers).groups()
-    with open("compactsolarsversion.properties","w") as f:
-      f.write("%s=%s\n" %("compactsolars.build.major.number",major))
-      f.write("%s=%s\n" %("compactsolars.build.minor.number",minor))
-      f.write("%s=%s\n" %("compactsolars.build.revision.number",rev))
-      f.write("%s=%s\n" %("compactsolars.build.githash",githash))
-      f.write("%s=%s\n" %("compactsolars.build.mcversion","1.2.5"))
+    with open("version.properties","w") as f:
+      f.write("%s=%s\n" %("CompactSolars.build.major.number",major))
+      f.write("%s=%s\n" %("CompactSolars.build.minor.number",minor))
+      f.write("%s=%s\n" %("CompactSolars.build.revision.number",rev))
+      f.write("%s=%s\n" %("CompactSolars.build.githash",githash))
+      f.write("%s=%s\n" %("CompactSolars.build.mcversion","1.3.2"))
     
 if __name__ == '__main__':
     main()

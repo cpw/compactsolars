@@ -1,7 +1,5 @@
 package ic2.api;
 
-import net.minecraft.src.ItemStack;
-
 /**
  * Provides the ability to store energy on the implementing item.
  * 
