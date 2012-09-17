@@ -66,6 +66,7 @@
 	</target>
 
 	<target name="init" depends="buildenvsetup">
+		<antcall target="writeversion" />
 		<property file="version.properties" />
 		<property name="build.number" value="${CompactSolars.build.major.number}.${compactsolars.build.minor.number}.${compactsolars.build.revision.number}" />
 		<property name="version.minecraft" value="${CompactSolars.build.mcversion}" />
