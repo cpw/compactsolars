@@ -4,7 +4,7 @@
  * are made available under the terms of the GNU Public License v3.0
  * which accompanies this distribution, and is available at
  * http://www.gnu.org/licenses/gpl.html
- * 
+ *
  * Contributors:
  *     cpw - initial API and implementation
  ******************************************************************************/
@@ -24,17 +24,17 @@ public class GUISolar extends GuiContainer {
 		LV(CompactSolarType.LV),
 		MV(CompactSolarType.MV),
 		HV(CompactSolarType.HV);
-		
+
 		private CompactSolarType mainType;
 
 		private GUI(CompactSolarType mainType) {
 			this.mainType=mainType;
 		}
-		
+
 		protected Container makeContainer(IInventory player, TileEntityCompactSolar solarTile) {
 			return new ContainerCompactSolar(player, solarTile, mainType);
 		}
-		
+
 		public static GUISolar buildGUI(CompactSolarType type, IInventory playerInventory, TileEntityCompactSolar solarTile) {
 			for (GUI gui : values()) {
 				if (solarTile.getType()==gui.mainType) {
@@ -55,7 +55,7 @@ public class GUISolar extends GuiContainer {
 	}
 
 	@Override
-	protected void drawGuiContainerForegroundLayer() {
+	protected void drawGuiContainerForegroundLayer(int p1, int p2) {
         fontRenderer.drawString(type.mainType.friendlyName, 8, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
 	}

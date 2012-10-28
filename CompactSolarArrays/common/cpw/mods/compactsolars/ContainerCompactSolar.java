@@ -75,8 +75,7 @@ public class ContainerCompactSolar extends Container {
 	}
 
 	@Override
-	public ItemStack transferStackInSlot(int i)
-	{
+	public ItemStack func_82846_b(EntityPlayer par1EntityPlayer, int i) {
 		ItemStack itemstack = null;
 		Slot slot = (Slot) inventorySlots.get(i);
 		if (slot != null && slot.getHasStack())
@@ -118,15 +117,17 @@ public class ContainerCompactSolar extends Container {
 			}
 			if (itemstack1.stackSize != itemstack.stackSize)
 			{
-				slot.onPickupFromSlot(itemstack1);
+				slot.func_82870_a(par1EntityPlayer, itemstack1);
 			}
 			else
 			{
 				return null;
 			}
 		}
+
 		return itemstack;
 	}
+
 	public EntityPlayer getPlayer() {
 		return myPlayer;
 	}

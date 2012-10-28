@@ -45,10 +45,10 @@ public class CompactSolars {
 		Configuration cfg = new Configuration(preinit.getSuggestedConfigurationFile());
 		try {
 			cfg.load();
-			Property block = cfg.getOrCreateBlockIdProperty("compactSolar", 183);
+			Property block = cfg.getBlock("compactSolar", 183);
 			block.comment="The block id for the compact solar arrays.";
 			compactSolarBlock = new BlockCompactSolar(block.getInt(183));
-			Property scale = cfg.getOrCreateIntProperty("scaleFactor", Configuration.CATEGORY_GENERAL, 1);
+			Property scale = cfg.get(Configuration.CATEGORY_GENERAL, "scaleFactor", 1);
 			scale.comment="The EU generation scaling factor. " +
 					"The average number of ticks needed to generate one EU packet." +
 					"1 is every tick, 2 is every other tick etc. " +
