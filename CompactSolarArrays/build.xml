@@ -40,7 +40,7 @@
 		</tstamp>
 		<property environment="env" />
 		<property file="build.properties" />
-		<property name="modname" value="mod_compactsolars" />
+		<property name="modname" value="compactsolars" />
 		<condition property="dev.home" value="${env.WORKSPACE}" else="${default.dev.home}">
 			<isset property="env.WORKSPACE" />
 		</condition>
