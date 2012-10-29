@@ -40,7 +40,7 @@ def main():
       f.write("%s=%s\n" %("CompactSolars.build.minor.number",minor))
       f.write("%s=%s\n" %("CompactSolars.build.revision.number",rev))
       f.write("%s=%s\n" %("CompactSolars.build.githash",githash))
-      f.write("%s=%s\n" %("CompactSolars.build.mcversion","1.3.2"))
+      f.write("%s=%s\n" %("CompactSolars.build.mcversion","1.4.2"))
     
 if __name__ == '__main__':
     main()
