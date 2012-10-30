@@ -2,185 +2,140 @@
 <!-- ======================================================================
 
 
-     mod_CompactSolars
+     CompactSolarArrays
      More solars in a block
 
      cpw
      ====================================================================== -->
 <project name="CompactSolars" default="build">
-	<description>Compact Solars</description>
-	<macrodef name="side">
-		<attribute name="prop" />
-		<attribute name="src" />
-		<attribute name="side" />
-		<sequential>
-			<property name="@{prop}" value="${@{side}.@{src}}" />
-			<condition property="is.client">
-				<equals arg1="@{side}" arg2="client" />
-			</condition>
-			<condition property="is.common">
-				<equals arg1="@{side}" arg2="common" />
-			</condition>
-		</sequential>
-	</macrodef>
+  <description>Compact Solars</description>
+  <target name="writeversion" depends="buildenvsetup">
+    <exec executable="${python.exe}" dir="${basedir}" failonerror="true">
+      <arg value="${basedir}/getversion.py" />
+      <arg value="${mcp.home}" />
+    </exec>
+    <propertyfile file="version.properties">
+      <entry key="CompactSolars.build.number" type="int" value="${version.build}"/>
+      <entry key="CompactSolars.version" type="string" value="${version}"/>
+    </propertyfile>
+  </target>
 
-	<target name="writeversion" depends="buildenvsetup">
-		<exec executable="${python.exe}" dir="${basedir}" failonerror="true">
-			<arg value="${basedir}/getversion.py" />
-		</exec>
-		<propertyfile file="version.properties">
-			<entry key="CompactSolars.build.number" type="int" value="${version.build}" />
-			<entry key="CompactSolars.version" type="string" value="${version}" />
-		</propertyfile>
-	</target>
+  <target name="buildenvsetup">
+    <tstamp>
+      <format pattern="yyMMddHHmmss" property="timestamp" />
+    </tstamp>
+    <property environment="env" />
+    <property file="build.properties" />
+    <property name="modname" value="compactsolars" />
+    <condition property="dev.home" value="${env.WORKSPACE}" else="${default.dev.home}">
+      <isset property="env.WORKSPACE" />
+    </condition>
+    <condition property="mcp.home" value="${env.WORKSPACE}/mcpworkspace" else="${default.mcp.home}">
+      <isset property="env.WORKSPACE" />
+    </condition>
+    <condition property="python.exe" value="${mcp.home}/runtime/bin/python/python_mcp" else="python">
+      <os family="Windows" />
+    </condition>
+    <property name="mcp.obfoutput" location="${mcp.home}/reobf" />
+    <property name="mcp.obfoutput.classes" location="${mcp.obfoutput}/minecraft" />
+    <property name="mcp.srcdir" location="${mcp.home}/src" />
+    <property name="client.mcp.srcdir" location="${mcp.srcdir}/minecraft" />
+    <property name="common.mcp.srcdir" location="${mcp.srcdir}/common" />
+    <property name="common.src.dir" location="${basedir}/common" />
+    <property name="client.src.dir" location="${basedir}/client" />
+    <property name="ic2api.src.dir" location="${dev.home}/ic2api/src" />
+    <property name="deploy.dir" location="${user.home}/.minecraft/mods" />
+    <property name="resource.dir" location="${basedir}/resources" />
+    <condition property="version.build" value="${env.BUILD_NUMBER}" else="1">
+      <isset property="env.BUILD_NUMBER" />
+    </condition>
+  </target>
 
-	<target name="buildenvsetup">
-		<tstamp>
-			<format pattern="yyMMddHHmmss" property="timestamp" />
-		</tstamp>
-		<property environment="env" />
-		<property file="build.properties" />
-		<property name="modname" value="compactsolars" />
-		<condition property="dev.home" value="${env.WORKSPACE}" else="${default.dev.home}">
-			<isset property="env.WORKSPACE" />
-		</condition>
-		<condition property="mcp.home" value="${env.WORKSPACE}/mcpworkspace" else="${default.mcp.home}">
-			<isset property="env.WORKSPACE" />
-		</condition>
-		<condition property="python.exe" value="${mcp.home}/runtime/bin/python/python_mcp" else="python">
-			<os family="Windows" />
-		</condition>
-		<property name="mcp.obfoutput" location="${mcp.home}/reobf" />
-		<property name="main.mcp.obfoutput" location="${mcp.obfoutput}/minecraft" />
-		<property name="mcp.srcdir" location="${mcp.home}/src" />
-		<property name="client.mcp.srcdir" location="${mcp.srcdir}/minecraft" />
-		<property name="common.mcp.srcdir" location="${mcp.srcdir}/common" />
-		<property name="client.src.dir" location="${basedir}/client" />
-		<property name="common.src.dir" location="${basedir}/common" />
-		<property name="deploy.dir" location="${user.home}/.minecraft/mods" />
-		<property name="ic2api.src.dir" location="${dev.home}/ic2api/src" />
-		<property name="resource.dir" location="${basedir}/resources" />
-		<condition property="version.build" value="${env.BUILD_NUMBER}" else="1">
-			<isset property="env.BUILD_NUMBER" />
-		</condition>
-	</target>
+  <target name="init" depends="buildenvsetup">
+    <antcall target="writeversion" />
+    <property file="version.properties" />
+    <property name="build.number" value="${CompactSolars.build.major.number}.${compactsolars.build.minor.number}.${compactsolars.build.revision.number}" />
+    <property name="version.minecraft" value="${CompactSolars.build.mcversion}" />
+    <property name="version.major" value="${CompactSolars.build.major.number}" />
+    <property name="version.minor" value="${CompactSolars.build.minor.number}" />
+    <property name="version.rev" value="${CompactSolars.build.revision.number}" />
+    <property name="version" value="${version.major}.${version.minor}.${version.rev}.${version.build}" />
+    <antcall target="writeversion" />
+  </target>
 
-	<target name="init" depends="buildenvsetup">
-		<antcall target="writeversion" />
-		<property file="version.properties" />
-		<property name="build.number" value="${CompactSolars.build.major.number}.${compactsolars.build.minor.number}.${compactsolars.build.revision.number}" />
-		<property name="version.minecraft" value="${CompactSolars.build.mcversion}" />
-		<property name="version.major" value="${CompactSolars.build.major.number}" />
-		<property name="version.minor" value="${CompactSolars.build.minor.number}" />
-		<property name="version.rev" value="${CompactSolars.build.revision.number}" />
-		<property name="version" value="${version.major}.${version.minor}.${version.rev}.${version.build}" />
-	</target>
+  <target name="clean">
+    <antcall target="clean-source"/>
+    <exec executable="${python.exe}" dir="${mcp.home}">
+      <arg value="${mcp.home}/runtime/updatemd5.py" />
+      <arg value="-f" />
+    </exec>
+  </target>
 
-	<target name="clean">
-		<antcall target="clean-source">
-			<param name="side" value="client" />
-		</antcall>
-		<antcall target="clean-source">
-			<param name="side" value="common" />
-		</antcall>
-		<exec executable="${python.exe}" dir="${mcp.home}">
-			<arg value="${mcp.home}/runtime/updatemd5.py" />
-			<arg value="-f" />
-		</exec>
-	</target>
+  <target name="recompile" depends="init">
+    <exec executable="${python.exe}" dir="${mcp.home}" failonerror="true">
+      <arg value="${mcp.home}/runtime/recompile.py" />
+    </exec>
+  </target>
 
-	<target name="recompile" depends="init">
-		<exec executable="${python.exe}" dir="${mcp.home}" failonerror="true">
-			<arg value="${mcp.home}/runtime/recompile.py" />
-		</exec>
-	</target>
+  <target name="reobfuscate" depends="init">
+    <exec executable="${python.exe}" dir="${mcp.home}">
+      <arg value="${mcp.home}/runtime/reobfuscate.py" />
+    </exec>
+  </target>
 
-	<target name="reobfuscate" depends="init">
-		<exec executable="${python.exe}" dir="${mcp.home}">
-			<arg value="${mcp.home}/runtime/reobfuscate.py" />
-		</exec>
-	</target>
+  <target name="merge" depends="init">
+    <copy todir="${client.mcp.srcdir}" overwrite="true" verbose="true">
+      <fileset dir="${client.src.dir}" includes="**/*.java" />
+    </copy>
+    <copy todir="${common.mcp.srcdir}" overwrite="true" verbose="true">
+      <fileset dir="${common.src.dir}" includes="**/*.java" />
+      <fileset dir="${ic2api.src.dir}" includes="**/*.java" />
+    </copy>
+  </target>
 
-	<target name="merge-client" depends="init,clean,merge-common">
-		<antcall target="merge-source">
-			<param name="side" value="client" />
-		</antcall>
-	</target>
+  <target name="build-universal" depends="init,clean,merge,recompile,reobfuscate">
+    <antcall target="writeversion" />
+    <antcall target="extract-built-jar"/>
+  </target>
 
-	<target name="merge-common" depends="init,clean">
-		<antcall target="merge-source">
-			<param name="side" value="common" />
-		</antcall>
-	</target>
+  <target name="extract-built-jar">
+    <property name="jarname" value="${modname}-universal-${version}" />
+    <mkdir dir="${basedir}/target" />
+    <jar destfile="${basedir}/target/${jarname}.zip">
+      <fileset dir="${mcp.obfoutput.classes}" includes="**/*.class" />
+      <zipfileset dir="${basedir}" includes="version.properties"/>
+      <mappedresources>
+        <concat>
+          <fileset dir="${basedir}" includes="mcmod.info" />
+          <filterchain>
+            <replacetokens>
+              <token key="VERSION" value="${version}" />
+            </replacetokens>
+          </filterchain>
+        </concat>
+        <mergemapper to="mcmod.info" />
+      </mappedresources>
+      <fileset dir="${resource.dir}" erroronmissingdir="false">
+	    <filename name="**/*.png" />
+      </fileset>
+    </jar>
+  </target>
 
-	<target name="merge-source">
-		<side prop="merge-to" src="mcp.srcdir" side="${side}" />
-		<side prop="side-from" src="src.dir" side="${side}" />
+  <target name="build" depends="build-universal" />
 
-		<copy todir="${merge-to}" overwrite="true" verbose="true">
-			<fileset dir="${side-from}" includes="**/*.java" />
-			<fileset dir="${ic2api.src.dir}">
-				<selector if="is.common">
-					<filename name="**/*.java" />
-				</selector>
-			</fileset>
-		</copy>
-	</target>
+  <target name="buildandclean" depends="build">
+    <antcall target="clean" />
+  </target>
 
-	<target name="build-universal" depends="init,clean,merge-common,merge-client,recompile,reobfuscate">
-		<antcall target="writeversion" />
-		<antcall target="extract-built-jar">
-			<param name="side" value="main" />
-		</antcall>
-	</target>
-
-	<target name="extract-built-jar">
-		<side prop="output" src="mcp.obfoutput" side="${side}" />
-		<property name="jarname" value="${modname}-${side}-${version}" />
-		<mkdir dir="${basedir}/target" />
-		<jar destfile="${basedir}/target/${jarname}.zip">
-			<fileset dir="${output}" includes="**/*.class" />
-			<zipfileset dir="${basedir}" includes="version.properties" />
-			<mappedresources>
-				<concat>
-					<fileset dir="${basedir}" includes="mcmod.info" />
-					<filterchain>
-						<replacetokens>
-							<token key="VERSION" value="${version}" />
-						</replacetokens>
-					</filterchain>
-				</concat>
-				<mergemapper to="mcmod.info" />
-			</mappedresources>
-			<fileset dir="${resource.dir}" erroronmissingdir="false">
-				<filename name="**/*.png" />
-			</fileset>
-		</jar>
-	</target>
-
-	<target name="build" depends="build-universal" />
-
-	<target name="buildandclean" depends="build">
-		<antcall target="clean" />
-	</target>
-
-	<!-- antcall target to merge source to a side -->
-	<target name="clean-source">
-		<side prop="delete-targ" src="mcp.srcdir" side="${side}" />
-		<side prop="side-from" src="src.dir" side="${side}" />
-		<delete verbose="true">
-			<fileset dir="${delete-targ}">
-				<present present="both" targetdir="${side-from}" />
-			</fileset>
-			<fileset dir="${delete-targ}">
-				<present present="both" targetdir="${ic2api.src.dir}" />
-			</fileset>
-		</delete>
-	</target>
-
-	<target name="deploy" depends="init,build-universal">
-		<property name="jarname" value="${modname}-client-${version}" />
-		<move file="${deploy.dir}/${jarname}.zip" tofile="${deploy.dir}/${jarname}.zip.${timestamp}" failonerror="false" verbose="true" />
-		<copy file="${basedir}/${jarname}.zip" todir="${deploy.dir}" verbose="true" />
-	</target>
+  <!-- antcall target to merge source to a side -->
+  <target name="clean-source">
+    <delete verbose="true">
+      <fileset dir="${client.mcp.srcdir}">
+        <present present="both" targetdir="${client.src.dir}" />
+      </fileset>
+      <fileset dir="${common.mcp.srcdir}">
+        <present present="both" targetdir="${common.src.dir}" />
+      </fileset>
+    </delete>
+  </target>
 </project>
