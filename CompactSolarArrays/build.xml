@@ -63,7 +63,7 @@
     <antcall target="writeversion" />
   </target>
 
-  <target name="clean">
+  <target name="clean" depends="buildenvsetup">
     <antcall target="clean-source"/>
     <exec executable="${python.exe}" dir="${mcp.home}">
       <arg value="${mcp.home}/runtime/updatemd5.py" />
