@@ -56,7 +56,7 @@ public class ContainerCompactSolar extends Container {
 		List<ICrafting> crafters = this.crafters;
 		for (ICrafting crafter : crafters) {
 			if (theSunIsVisible != tile.theSunIsVisible || !initialized) {
-				crafter.updateCraftingInventoryInfo(this, 0, tile.theSunIsVisible ? 1 : 0);
+				crafter.sendProgressBarUpdate(this, 0, tile.theSunIsVisible ? 1 : 0);
 			}
 		}
 		initialized = true;

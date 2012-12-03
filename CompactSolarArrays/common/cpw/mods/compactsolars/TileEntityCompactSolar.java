@@ -279,4 +279,8 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
         return null;
     }
 	}
+	@Override
+	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
+		return new ItemStack(CompactSolars.compactSolarBlock,getType().ordinal());
+	}
 }

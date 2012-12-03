@@ -29,7 +29,7 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[1.108,);required-after:Forge@[6.0,)")
+@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[1.109,);required-after:Forge@[6.4,)")
 @NetworkMod(clientSideRequired=false,serverSideRequired=true,versionBounds="[3.1,)")
 public class CompactSolars {
   @SidedProxy(clientSide="cpw.mods.compactsolars.client.ClientProxy", serverSide="cpw.mods.compactsolars.CommonProxy")
@@ -45,9 +45,9 @@ public class CompactSolars {
 		Configuration cfg = new Configuration(preinit.getSuggestedConfigurationFile());
 		try {
 			cfg.load();
-			Property block = cfg.getBlock("compactSolar", 183);
+			Property block = cfg.getBlock("compactSolar", 650);
 			block.comment="The block id for the compact solar arrays.";
-			compactSolarBlock = new BlockCompactSolar(block.getInt(183));
+			compactSolarBlock = new BlockCompactSolar(block.getInt(650));
 			Property scale = cfg.get(Configuration.CATEGORY_GENERAL, "scaleFactor", 1);
 			scale.comment="The EU generation scaling factor. " +
 					"The average number of ticks needed to generate one EU packet." +
