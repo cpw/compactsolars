@@ -50,8 +50,8 @@ public class ContainerCompactSolar extends Container {
 	}
 
 	@Override
-	public void updateCraftingResults() {
-		super.updateCraftingResults();
+	public void detectAndSendChanges() {
+		super.detectAndSendChanges();
 		@SuppressWarnings("unchecked")
 		List<ICrafting> crafters = this.crafters;
 		for (ICrafting crafter : crafters) {
@@ -63,6 +63,7 @@ public class ContainerCompactSolar extends Container {
 		theSunIsVisible = tile.theSunIsVisible;
 	}
 
+	@Override
 	public void updateProgressBar(int i, int j) {
 		if (i == 0) {
 			tile.theSunIsVisible = (j == 1);
