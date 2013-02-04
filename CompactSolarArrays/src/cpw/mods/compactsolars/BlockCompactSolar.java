@@ -138,7 +138,7 @@ public class BlockCompactSolar extends BlockContainer {
                 entityitem.motionZ = (float)random.nextGaussian() * f3;
                 if (itemstack.hasTagCompound())
                 {
-                	entityitem.func_92014_d().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
+                	entityitem.getEntityItem().setTagCompound((NBTTagCompound)itemstack.getTagCompound().copy());
                 }
                 world.spawnEntityInWorld(entityitem);
             }

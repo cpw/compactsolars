@@ -26,6 +26,10 @@ public class ClientProxy extends CommonProxy {
 	@Override
 	public void registerRenderInformation() {
 		MinecraftForgeClient.preloadTexture("/cpw/mods/compactsolars/sprites/block_textures.png");
+        MinecraftForgeClient.preloadTexture("/cpw/mods/compactsolars/sprites/solar_hat_LV.png");
+        MinecraftForgeClient.preloadTexture("/cpw/mods/compactsolars/sprites/solar_hat_MV.png");
+        MinecraftForgeClient.preloadTexture("/cpw/mods/compactsolars/sprites/solar_hat_HV.png");
+        MinecraftForgeClient.preloadTexture("/cpw/mods/compactsolars/sprites/item_textures.png");
 	}
 
 	@Override

@@ -11,27 +11,35 @@
 package cpw.mods.compactsolars;
 
 import ic2.api.Items;
+import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraftforge.common.Configuration;
 
 import com.google.common.base.Throwables;
 
 import cpw.mods.fml.common.registry.GameRegistry;
+import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public enum CompactSolarType {
-	LV(8, "Low Voltage Solar Array", "lvTransformer", TileEntityCompactSolar.class),
-	MV(64, "Medium Voltage Solar Array", "mvTransformer", TileEntityCompactSolarMV.class),
-	HV(512, "High Voltage Solar Array", "hvTransformer", TileEntityCompactSolarHV.class);
+	LV(8, "Low Voltage Solar Array", "lvTransformer", TileEntityCompactSolar.class, "solar_hat_LV.png"),
+	MV(64, "Medium Voltage Solar Array", "mvTransformer", TileEntityCompactSolarMV.class, "solar_hat_MV.png"),
+	HV(512, "High Voltage Solar Array", "hvTransformer", TileEntityCompactSolarHV.class, "solar_hat_HV.png");
 
 	private int output;
 	public Class<? extends TileEntityCompactSolar> clazz;
 	public String friendlyName;
 	public String transformerName;
+	public final String hatTexture;
+    private String hatName;
+    private ItemSolarHat item;
 
-	private CompactSolarType(int output, String friendlyName, String transformerName, Class<? extends TileEntityCompactSolar> clazz) {
+	private CompactSolarType(int output, String friendlyName, String transformerName, Class<? extends TileEntityCompactSolar> clazz, String hatTexture) {
 		this.output=output;
 		this.friendlyName=friendlyName;
 		this.transformerName=transformerName;
 		this.clazz=clazz;
+		this.hatName = "solarHat"+name();
+		this.hatTexture = "/cpw/mods/compactsolars/sprites/"+hatTexture;
 	}
 
 	public static void generateRecipes(BlockCompactSolar block) {
@@ -70,4 +78,31 @@ public enum CompactSolarType {
 		return "CompactSolarType."+name();
 	}
 
+	public ItemSolarHat buildHat(Configuration cfg, int id)
+	{
+        int itemId = cfg.get(Configuration.CATEGORY_ITEM, hatName, id).getInt(id);
+        item = new ItemSolarHat(itemId, this);
+        item.setItemName(hatName);
+        GameRegistry.registerItem(item, hatName);
+        LanguageRegistry.instance().addStringLocalization("item."+hatName+".name", name()+" Solar Hat");
+        return item;
+	}
+
+	public static void buildHats(Configuration cfg, int defaultId)
+	{
+	    for (CompactSolarType typ : values())
+	    {
+	        typ.buildHat(cfg, defaultId++);
+	    }
+	}
+
+    public static void generateHatRecipes(BlockCompactSolar block)
+    {
+        Item ironHat = Item.helmetSteel;
+        for (CompactSolarType typ : values())
+        {
+            ItemStack solarBlock = new ItemStack(block, 0, typ.ordinal());
+            GameRegistry.addShapelessRecipe(new ItemStack(typ.item), solarBlock, ironHat);
+        }
+    }
 }

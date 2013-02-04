@@ -20,17 +20,19 @@ import cpw.mods.fml.common.Mod.Init;
 import cpw.mods.fml.common.Mod.Instance;
 import cpw.mods.fml.common.Mod.PostInit;
 import cpw.mods.fml.common.Mod.PreInit;
+import cpw.mods.fml.common.Mod.ServerStopping;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
 import cpw.mods.fml.common.event.FMLPreInitializationEvent;
+import cpw.mods.fml.common.event.FMLServerStoppingEvent;
 import cpw.mods.fml.common.network.NetworkMod;
 import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[1.112,);required-after:Forge@[6.5,)")
-@NetworkMod(clientSideRequired=false,serverSideRequired=true,versionBounds="[3.2,)")
+@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[1.112,);required-after:Forge@[6.6.1,)")
+@NetworkMod(clientSideRequired=false,serverSideRequired=true,versionBounds="[4.0,)")
 public class CompactSolars {
   @SidedProxy(clientSide="cpw.mods.compactsolars.client.ClientProxy", serverSide="cpw.mods.compactsolars.CommonProxy")
 	public static CommonProxy proxy;
@@ -42,12 +44,14 @@ public class CompactSolars {
 	@PreInit
 	public void preInit(FMLPreInitializationEvent preinit) {
 		Version.init(preinit.getVersionProperties());
+        preinit.getModMetadata().version = Version.version();
 		Configuration cfg = new Configuration(preinit.getSuggestedConfigurationFile());
 		try {
 			cfg.load();
 			Property block = cfg.getBlock("compactSolar", 650);
 			block.comment="The block id for the compact solar arrays.";
 			compactSolarBlock = new BlockCompactSolar(block.getInt(650));
+			CompactSolarType.buildHats(cfg, 19551);
 			Property scale = cfg.get(Configuration.CATEGORY_GENERAL, "scaleFactor", 1);
 			scale.comment="The EU generation scaling factor. " +
 					"The average number of ticks needed to generate one EU packet." +
@@ -60,7 +64,6 @@ public class CompactSolars {
 		} finally {
 			cfg.save();
 		}
-		preinit.getModMetadata().version = Version.version();
 	}
 	@Init
 	public void load(FMLInitializationEvent init) {
@@ -77,5 +80,12 @@ public class CompactSolars {
 	@PostInit
 	public void modsLoaded(FMLPostInitializationEvent postinit) {
 		CompactSolarType.generateRecipes(compactSolarBlock);
+		CompactSolarType.generateHatRecipes(compactSolarBlock);
+	}
+
+	@ServerStopping
+	public void resetMap(FMLServerStoppingEvent evt)
+	{
+	    ItemSolarHat.clearRaining();
 	}
 }

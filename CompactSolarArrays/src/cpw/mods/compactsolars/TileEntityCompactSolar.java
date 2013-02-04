@@ -107,7 +107,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	}
 
 	private int generateEnergy() {
-		return ( CompactSolars.productionRate==1.0F || ( worldObj.rand.nextFloat()<CompactSolars.productionRate)) ? type.getOutput() : 0;
+		return type.getOutput();
 	}
 
 	@Override
