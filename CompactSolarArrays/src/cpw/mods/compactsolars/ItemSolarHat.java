@@ -12,18 +12,21 @@ import com.google.common.collect.MapMaker;
 import com.google.common.math.IntMath;
 
 import net.minecraft.entity.Entity;
+import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
+import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.IArmorTextureProvider;
+import net.minecraftforge.common.ISpecialArmor;
 
-public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider {
+public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider, ISpecialArmor {
     private class PlayerState {
         boolean canRain;
         public long buildUp;
@@ -124,5 +127,23 @@ public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider {
     public static void clearRaining()
     {
         ItemSolarHat.playerState.clear();
+    }
+
+    @Override
+    public ArmorProperties getProperties(EntityLiving player, ItemStack armor, DamageSource source, double damage, int slot)
+    {
+        return new ArmorProperties(0, 0, 0);
+    }
+
+    @Override
+    public int getArmorDisplay(EntityPlayer player, ItemStack armor, int slot)
+    {
+        return 0;
+    }
+
+    @Override
+    public void damageArmor(EntityLiving entity, ItemStack stack, DamageSource source, int damage, int slot)
+    {
+        return;
     }
 }
