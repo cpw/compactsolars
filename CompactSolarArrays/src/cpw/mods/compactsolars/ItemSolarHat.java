@@ -22,9 +22,8 @@ import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.IArmorTextureProvider;
-import net.minecraftforge.common.ITickingArmor;
 
-public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider, ITickingArmor {
+public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider {
     private class PlayerState {
         boolean canRain;
         public long buildUp;
