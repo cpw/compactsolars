@@ -17,7 +17,7 @@
   "parent":"",
   "requiredMods": [
     "IC2@[1.112,)",
-    "Forge@[6.6.1,)",
+    "Forge@[6.6.1,)"
   ],
   "dependencies": [
   	"IC2@[1.112,)"
