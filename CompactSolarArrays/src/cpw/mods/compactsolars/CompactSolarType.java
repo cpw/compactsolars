@@ -21,9 +21,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public enum CompactSolarType {
-	LV(8, "Low Voltage Solar Array", "lvTransformer", TileEntityCompactSolar.class, "solar_hat_LV.png"),
-	MV(64, "Medium Voltage Solar Array", "mvTransformer", TileEntityCompactSolarMV.class, "solar_hat_MV.png"),
-	HV(512, "High Voltage Solar Array", "hvTransformer", TileEntityCompactSolarHV.class, "solar_hat_HV.png");
+	LV(8, "Low Voltage Solar Array", "lvTransformer", TileEntityCompactSolar.class, "compactsolars:solar_hat_LV"),
+	MV(64, "Medium Voltage Solar Array", "mvTransformer", TileEntityCompactSolarMV.class, "compactsolars:solar_hat_MV"),
+	HV(512, "High Voltage Solar Array", "hvTransformer", TileEntityCompactSolarHV.class, "compactsolars:solar_hat_HV");
 
 	private int output;
 	public Class<? extends TileEntityCompactSolar> clazz;
@@ -39,7 +39,7 @@ public enum CompactSolarType {
 		this.transformerName=transformerName;
 		this.clazz=clazz;
 		this.hatName = "solarHat"+name();
-		this.hatTexture = "/cpw/mods/compactsolars/sprites/"+hatTexture;
+		this.hatTexture = hatTexture;
 	}
 
 	public static void generateRecipes(BlockCompactSolar block) {
@@ -82,7 +82,7 @@ public enum CompactSolarType {
 	{
         int itemId = cfg.get(Configuration.CATEGORY_ITEM, hatName, id).getInt(id);
         item = new ItemSolarHat(itemId, this);
-        item.setItemName(hatName);
+        item.setUnlocalizedName(hatName);
         GameRegistry.registerItem(item, hatName);
         LanguageRegistry.instance().addStringLocalization("item."+hatName+".name", name()+" Solar Hat");
         return item;

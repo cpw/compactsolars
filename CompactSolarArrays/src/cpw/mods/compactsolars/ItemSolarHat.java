@@ -11,6 +11,10 @@ import org.w3c.dom.events.EventException;
 import com.google.common.collect.MapMaker;
 import com.google.common.math.IntMath;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
@@ -40,19 +44,12 @@ public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider, IS
     {
         super(par1, EnumHelper.addArmorMaterial("COMPACTSOLARHAT", 1, new int[] { 1, 1, 1, 1}, 1), 0, 0);
         this.type = type;
-        setIconIndex(type.ordinal());
     }
 
     @Override
     public String getArmorTextureFile(ItemStack itemstack)
     {
         return type.hatTexture;
-    }
-
-    @Override
-    public String getTextureFile()
-    {
-        return "/cpw/mods/compactsolars/sprites/item_textures.png";
     }
 
     @Override
@@ -145,5 +142,12 @@ public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider, IS
     public void damageArmor(EntityLiving entity, ItemStack stack, DamageSource source, int damage, int slot)
     {
         return;
+    }
+
+    @Override
+    @SideOnly(Side.CLIENT)
+    public void func_94581_a(IconRegister par1IconRegister)
+    {
+        this.iconIndex = par1IconRegister.func_94245_a(type.hatTexture);
     }
 }
