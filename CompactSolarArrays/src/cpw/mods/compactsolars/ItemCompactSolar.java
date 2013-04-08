@@ -11,13 +11,12 @@
 package cpw.mods.compactsolars;
 
 import net.minecraft.item.ItemBlock;
+import net.minecraft.item.ItemBlockWithMetadata;
 import net.minecraft.item.ItemStack;
 
-public class ItemCompactSolar extends ItemBlock {
+public class ItemCompactSolar extends ItemBlockWithMetadata {
 	public ItemCompactSolar(int id) {
-		super(id);
-        setMaxDamage(0);
-        setHasSubtypes(true);
+		super(id, CompactSolars.compactSolarBlock);
 	}
 
 	public int getMetadata(int i) {
@@ -28,7 +27,8 @@ public class ItemCompactSolar extends ItemBlock {
 		}
 	}
 	@Override
-	public String getItemNameIS(ItemStack itemstack) {
+	public String getUnlocalizedName(ItemStack itemstack)
+	{
 		return CompactSolarType.values()[itemstack.getItemDamage()].name();
 	}
 

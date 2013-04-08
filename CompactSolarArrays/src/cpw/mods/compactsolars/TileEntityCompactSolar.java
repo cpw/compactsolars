@@ -64,10 +64,6 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 
 	@Override
 	public void updateEntity() {
-		if (compatibilityMode) {
-			worldObj.setBlockMetadataWithNotify(xCoord, yCoord, zCoord, type.ordinal());
-			compatibilityMode=false;
-		}
 		if (!initialized && worldObj != null) {
 			if (worldObj.isRemote) {
 				NetworkHelper.requestInitialData(this);
@@ -248,9 +244,6 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 
 	@Override
 	public void readFromNBT(NBTTagCompound nbttagcompound) {
-		if (nbttagcompound.getString("id")!=type.name()) {
-			compatibilityMode=true;
-		}
 		super.readFromNBT(nbttagcompound);
 		NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
 		inventory = new ItemStack[getSizeInventory()];
@@ -288,4 +281,14 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	public ItemStack getWrenchDrop(EntityPlayer entityPlayer) {
 		return new ItemStack(CompactSolars.compactSolarBlock,1,getType().ordinal());
 	}
+    @Override
+    public boolean isInvNameLocalized()
+    {
+        return false;
+    }
+    @Override
+    public boolean isStackValidForSlot(int i, ItemStack itemstack)
+    {
+        return itemstack !=null && itemstack.getItem() instanceof IElectricItem;
+    }
 }

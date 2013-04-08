@@ -15,12 +15,14 @@ import java.util.Random;
 
 import net.minecraft.block.BlockContainer;
 import net.minecraft.block.material.Material;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.creativetab.CreativeTabs;
 import net.minecraft.entity.item.EntityItem;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraft.util.Icon;
 import net.minecraft.world.IBlockAccess;
 import net.minecraft.world.World;
 import cpw.mods.fml.relauncher.Side;
@@ -28,13 +30,14 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 public class BlockCompactSolar extends BlockContainer {
 	private Random random;
+	@SideOnly(Side.CLIENT)
+	private Icon[][] textures;
 
 	public BlockCompactSolar(int blockId) {
 		super(blockId,Material.iron);
-		setBlockName("CompactSolar");
+		setUnlocalizedName("CompactSolar");
 		setHardness(3.0F);
 		random=new Random();
-		setRequiresSelfNotify();
 		setCreativeTab(CreativeTabs.tabRedstone);
 	}
 
@@ -44,38 +47,20 @@ public class BlockCompactSolar extends BlockContainer {
 	}
 
 	@Override
-	public TileEntity createNewTileEntity(World world, int metadata) {
+	public TileEntity createTileEntity(World world, int metadata) {
 		return CompactSolarType.makeEntity(metadata);
 	}
 
 	@Override
-	public int getBlockTexture(IBlockAccess worldAccess, int i, int j, int k, int l) {
-		int meta=worldAccess.getBlockMetadata(i, j, k);
-		CompactSolarType type=CompactSolarType.values()[meta];
-		if (l==1) {
-			return type.getTextureRow()*16+1;		// Top
-		} else if (l==0) {
-			return type.getTextureRow()*16+2;		// Bottom
-		} else {
-			return type.getTextureRow()*16;			// Sides
-		}
-	}
-
-	@Override
-	public int getBlockTextureFromSideAndMetadata(int i, int j) {
-		CompactSolarType typ=CompactSolarType.values()[j];
-		switch (i) {
-		case 1: // Top
-			return typ.getTextureRow()*16+1;
-		case 0: // Bottom
-			return typ.getTextureRow()*16+2;
-		default: // Sides
-			return typ.getTextureRow()*16;
-		}
-	}
-
-	public String getTextureFile() {
-		return "/cpw/mods/compactsolars/sprites/block_textures.png";
+	public Icon getBlockTextureFromSideAndMetadata(int i, int j) {
+	    if (j>CompactSolarType.values().length)
+	    {
+	        return null;
+	    }
+	    else
+	    {
+	        return textures[j][i];
+	    }
 	}
 
 	@Override
@@ -152,5 +137,18 @@ public class BlockCompactSolar extends BlockContainer {
 		for (CompactSolarType type : CompactSolarType.values()) {
 			itemList.add(new ItemStack(this,1,type.ordinal()));
 		}
+	}
+
+	@Override
+	@SideOnly(Side.CLIENT)
+	public void registerIcons(IconRegister par1IconRegister)
+	{
+	    for (CompactSolarType typ: CompactSolarType.values()) {
+	        for (int i = 0; i < 3; i++) {
+	            String side = i == 0 ? "bottom" : i == 1 ? "top" : "side";
+	            String texName = String.format("compactsolars:block%s%s",typ.name(),side);
+	            textures[typ.ordinal()][i]=par1IconRegister.registerIcon(texName);
+	        }
+	    }
 	}
 }
