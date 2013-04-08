@@ -53,13 +53,13 @@ public class BlockCompactSolar extends BlockContainer {
 
 	@Override
 	public Icon getBlockTextureFromSideAndMetadata(int i, int j) {
-	    if (j>CompactSolarType.values().length)
+	    if (j>=CompactSolarType.values().length)
 	    {
 	        return null;
 	    }
 	    else
 	    {
-	        return textures[j][i];
+	        return textures[j][i > 2 ? 2 : i];
 	    }
 	}
 
@@ -146,8 +146,8 @@ public class BlockCompactSolar extends BlockContainer {
 	    textures = new Icon[CompactSolarType.values().length][3];
 	    for (CompactSolarType typ: CompactSolarType.values()) {
 	        for (int i = 0; i < 3; i++) {
-	            String side = i == 0 ? "bottom" : i == 1 ? "top" : "side";
-	            String texName = String.format("compactsolars:block%s%s",typ.name(),side);
+	            String side = i == 0 ? "Bottom" : i == 1 ? "Top" : "Side";
+	            String texName = String.format("compactsolars:%s%s",typ.name().toLowerCase(),side);
 	            textures[typ.ordinal()][i]=par1IconRegister.registerIcon(texName);
 	        }
 	    }

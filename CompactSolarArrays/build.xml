@@ -121,9 +121,12 @@
 
   <!-- antcall target to merge source to a side -->
   <target name="clean-source">
+  	<echo>Cleaning ${client.mcp.srcdir}</echo>
     <delete verbose="true">
       <fileset dir="${client.mcp.srcdir}">
         <present present="both" targetdir="${src.dir}" />
+      </fileset>
+      <fileset dir="${client.mcp.srcdir}">
         <present present="both" targetdir="${ic2api.src.dir}" />
       </fileset>
     </delete>

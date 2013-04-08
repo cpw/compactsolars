@@ -10,6 +10,9 @@
  ******************************************************************************/
 package cpw.mods.compactsolars;
 
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.item.ItemBlock;
 import net.minecraft.item.ItemBlockWithMetadata;
 import net.minecraft.item.ItemStack;
@@ -31,5 +34,4 @@ public class ItemCompactSolar extends ItemBlockWithMetadata {
 	{
 		return CompactSolarType.values()[itemstack.getItemDamage()].name();
 	}
-
 }

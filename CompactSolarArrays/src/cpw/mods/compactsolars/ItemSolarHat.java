@@ -148,6 +148,6 @@ public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     @SideOnly(Side.CLIENT)
     public void updateIcons(IconRegister par1IconRegister)
     {
-        this.iconIndex = par1IconRegister.registerIcon(type.hatTexture);
+        this.iconIndex = par1IconRegister.registerIcon(type.hatItemTexture);
     }
 }

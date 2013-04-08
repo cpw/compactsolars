@@ -21,9 +21,9 @@ import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
 public enum CompactSolarType {
-	LV(8, "Low Voltage Solar Array", "lvTransformer", TileEntityCompactSolar.class, "compactsolars:solar_hat_LV"),
-	MV(64, "Medium Voltage Solar Array", "mvTransformer", TileEntityCompactSolarMV.class, "compactsolars:solar_hat_MV"),
-	HV(512, "High Voltage Solar Array", "hvTransformer", TileEntityCompactSolarHV.class, "compactsolars:solar_hat_HV");
+	LV(8, "Low Voltage Solar Array", "lvTransformer", TileEntityCompactSolar.class, "lvHat"),
+	MV(64, "Medium Voltage Solar Array", "mvTransformer", TileEntityCompactSolarMV.class, "mvHat"),
+	HV(512, "High Voltage Solar Array", "hvTransformer", TileEntityCompactSolarHV.class, "hvHat");
 
 	private int output;
 	public Class<? extends TileEntityCompactSolar> clazz;
@@ -32,6 +32,7 @@ public enum CompactSolarType {
 	public final String hatTexture;
     private String hatName;
     private ItemSolarHat item;
+    public final String hatItemTexture;
 
 	private CompactSolarType(int output, String friendlyName, String transformerName, Class<? extends TileEntityCompactSolar> clazz, String hatTexture) {
 		this.output=output;
@@ -39,7 +40,8 @@ public enum CompactSolarType {
 		this.transformerName=transformerName;
 		this.clazz=clazz;
 		this.hatName = "solarHat"+name();
-		this.hatTexture = hatTexture;
+		this.hatTexture = "/mods/compactsolars/textures/armor/"+hatTexture+".png";
+		this.hatItemTexture = "compactsolars:"+hatTexture;
 	}
 
 	public static void generateRecipes(BlockCompactSolar block) {
