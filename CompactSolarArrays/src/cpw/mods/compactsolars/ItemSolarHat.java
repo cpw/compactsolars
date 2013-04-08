@@ -30,7 +30,7 @@ import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.IArmorTextureProvider;
 import net.minecraftforge.common.ISpecialArmor;
 
-public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider, ISpecialArmor {
+public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     private class PlayerState {
         boolean canRain;
         public long buildUp;
@@ -47,7 +47,7 @@ public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider, IS
     }
 
     @Override
-    public String getArmorTextureFile(ItemStack itemstack)
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer)
     {
         return type.hatTexture;
     }
@@ -146,8 +146,8 @@ public class ItemSolarHat extends ItemArmor implements IArmorTextureProvider, IS
 
     @Override
     @SideOnly(Side.CLIENT)
-    public void func_94581_a(IconRegister par1IconRegister)
+    public void updateIcons(IconRegister par1IconRegister)
     {
-        this.iconIndex = par1IconRegister.func_94245_a(type.hatTexture);
+        this.iconIndex = par1IconRegister.registerIcon(type.hatTexture);
     }
 }

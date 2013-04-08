@@ -282,13 +282,13 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		return new ItemStack(CompactSolars.compactSolarBlock,1,getType().ordinal());
 	}
     @Override
-    public boolean func_94042_c()
+    public boolean isInvNameLocalized()
     {
         return false;
     }
     @Override
-    public boolean func_94041_b(int i, ItemStack itemstack)
+    public boolean isStackValidForSlot(int i, ItemStack itemstack)
     {
-        return false;
+        return itemstack !=null && itemstack.getItem() instanceof IElectricItem;
     }
 }

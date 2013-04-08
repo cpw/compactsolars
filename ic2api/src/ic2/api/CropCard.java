@@ -2,10 +2,15 @@ package ic2.api;
 
 import java.util.HashMap;
 
+import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
 import net.minecraft.entity.player.EntityPlayer;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.Icon;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Base agriculture crop.
@@ -20,14 +25,14 @@ public abstract class CropCard
 	 * @return Plant name
 	 */
 	public abstract String name();
-	
+
 	/**
 	 * Your name here, will be shown in "Discovered by:" when analyzing seeds.
 	 * 
 	 * @return Your name
 	 */
 	public String discoveredBy() {return "Alblaka";}
-	
+
 	/**
 	 * Description of your plant. Keep it short, a few characters per line for up to two lines.
 	 * Default is showing attributes of your plant, 2 per line.
@@ -57,7 +62,7 @@ public abstract class CropCard
 			return s;
 		}
 	}
-	
+
 	/**
 	 * Tier of the plant. Ranges from 1 to 16, 0 is Weed.
 	 * Valuable and powerful crops have higher tiers, useless and weak ones have lower tiers.
@@ -65,7 +70,7 @@ public abstract class CropCard
 	 * @return Tier
 	 */
 	public abstract int tier();
-	
+
 	/**
 	 * Describe the plant through a set of stats, influencing breeding.
 	 * Plants sharing stats and attributes will tend to cross-breed more often.
@@ -81,7 +86,7 @@ public abstract class CropCard
 	 * @return The requested value of the stats
 	 */
 	public abstract int stat(int n);
-	
+
 	/**
 	 * Additional attributes of the plant, also influencing breeding.
 	 * Plants sharing stats and attributes will tend to cross-breed more often.
@@ -89,15 +94,41 @@ public abstract class CropCard
 	 * @return Attributes as an array of strings
 	 */
 	public abstract String[] attributes();
-	
+
 	/**
-	 * Sprite index the crop is meant to be rendered with.
+	 * Determine the max crop size.
+	 * 
+	 * Currently only used for texture allocation.
+	 */
+	public abstract int maxSize();
+
+	/**
+	 * Instantiate your Icons here.
+	 * 
+	 * This method will get called by IC2, don't call it yourself.
+	 */
+	@SideOnly(Side.CLIENT)
+	public void registerSprites(IconRegister iconRegister) {
+		textures = new Icon[maxSize()];
+
+		for (int i = 1; i <= textures.length; i++) {
+			textures[i-1] = iconRegister.registerIcon("ic2:crop/blockCrop."+name()+"."+i);
+		}
+	}
+
+	/**
+	 * Sprite the crop is meant to be rendered with.
 	 * 
 	 * @param crop reference to TECrop
 	 * @return 0-255, representing the sprite index on the crop's spritesheet.
 	 */
-	public abstract int getSpriteIndex(TECrop crop);	
-	
+	@SideOnly(Side.CLIENT)
+	public Icon getSprite(TECrop crop) {
+		if (crop.size <= 0 || crop.size > textures.length) return null;
+
+		return textures[crop.size - 1];
+	}
+
 	/**
 	 * Get the crop's spritesheet.
 	 * Per default crops_0.png of ic2-sprites
@@ -106,7 +137,7 @@ public abstract class CropCard
 	public String getTextureFile() {
 		return "/ic2/sprites/crops_0.png";
 	}
-	
+
 	/**
 	 * Amount of growth points needed to increase the plant's size.
 	 * Default is 200 * tier.
@@ -115,7 +146,7 @@ public abstract class CropCard
 	{
 		return tier()*200;
 	}
-	
+
 	/**
 	 * Check whether the plant can grow further.
 	 * 
@@ -131,7 +162,7 @@ public abstract class CropCard
 	 * @return Whether the crop can grow
 	 */
 	public abstract boolean canGrow(TECrop crop);
-	
+
 	/**
 	 * Calculate the influence for the plant to grow based on humidity, nutrients and air.
 	 * Normal behavior is rating the three stats "normal", with each of them ranging from 0-30.
@@ -143,13 +174,13 @@ public abstract class CropCard
 	 * @param humidity ground humidity, influenced by hydration
 	 * @param nutrients nutrient quality in ground, based on fertilizers
 	 * @param air air quality, influences by open gardens and less crops surrounding this one
-	 * @return 0-30 
+	 * @return 0-30
 	 */
 	public int weightInfluences(TECrop crop, float humidity, float nutrients, float air)
 	{
 		return (int) (humidity+nutrients+air);
 	}
-	
+
 	/**
 	 * Used to determine whether the plant can crossbreed with another crop.
 	 * Default is allow crossbreeding if the size is greater or equal than 3.
@@ -160,8 +191,8 @@ public abstract class CropCard
 	{
 		return crop.size >= 3;
 	}
-	
-	
+
+
 	/**
 	 * Called when the plant is rightclicked by a player.
 	 * Default action is harvesting.
@@ -174,7 +205,7 @@ public abstract class CropCard
 	{
 		return crop.harvest(true);
 	}
-	
+
 	/**
 	 * Check whether the crop can be harvested.
 	 * 
@@ -182,7 +213,7 @@ public abstract class CropCard
 	 * @return Whether the crop can be harvested in its current state.
 	 */
 	public abstract boolean canBeHarvested(TECrop crop);
-	
+
 	/**
 	 * Base chance for dropping the plant's gains, specify values greater than 1 for multiple drops.
 	 * Default is 0.95^tier.
@@ -195,7 +226,7 @@ public abstract class CropCard
 		for (int i = 0; i < tier(); i++) {base*=0.95;}
 		return base;
 	}
-	
+
 	/**
 	 * Item obtained from harvesting the plant.
 	 * 
@@ -203,17 +234,17 @@ public abstract class CropCard
 	 * @return Item obtained
 	 */
 	public abstract ItemStack getGain(TECrop crop);
-	
+
 	/**
 	 * Get the size of the plant after harvesting.
-	 * Default is 1. 
+	 * Default is 1.
 	 * 
 	 * @param crop reference to TECrop
 	 * @return Plant size after harvesting
 	 */
 	public byte getSizeAfterHarvest(TECrop crop) {return 1;}
-	
-	
+
+
 	/**
 	 * Called when the plant is leftclicked by a player.
 	 * Default action is picking the plant.
@@ -226,7 +257,7 @@ public abstract class CropCard
 	{
 		return crop.pick(true);
 	}
-		
+
 	/**
 	 * Base chance for dropping seeds when the plant is picked.
 	 * Default is 0.5*0.8^tier with a bigger chance for sizes greater than 2 and absolutely no chance for size 0.
@@ -242,7 +273,7 @@ public abstract class CropCard
 		for (int i = 0; i < tier(); i++) {base*=0.8;}
 		return base;
 	}
-	
+
 	/**
 	 * Obtain seeds dropped when the plant is picked.
 	 * Multiple drops of the returned ItemStack can occur.
@@ -255,28 +286,28 @@ public abstract class CropCard
 	{
 		return crop.generateSeeds(crop.id, crop.statGrowth, crop.statGain, crop.statResistance, crop.scanLevel);
 	}
-	
+
 	/**
 	 * Called when a neighbor block to the crop has changed.
 	 * 
 	 * @param crop reference to TECrop
 	 */
 	public void onNeighbourChange(TECrop crop){}
-	
+
 	/**
 	 * Check if the crop should emit redstone.
 	 * 
 	 * @return Whether the crop should emit redstone
 	 */
-	public boolean emitRedstone(TECrop crop){return false;}
-	
+	public int emitRedstone(TECrop crop){return 0;}
+
 	/**
 	 * Called when the crop is destroyed.
 	 * 
 	 * @param crop reference to TECrop
 	 */
 	public void onBlockDestroyed(TECrop crop){}
-	
+
 	/**
 	 * Get the light value emitted by the plant.
 	 * 
@@ -284,13 +315,13 @@ public abstract class CropCard
 	 * @return Light value emitted
 	 */
 	public int getEmittedLight(TECrop crop) {return 0;}
-	
+
 	/**
 	 * Default is true if the entity is an EntityLiving in jumping or sprinting state.
 	 * 
 	 * @param crop reference to TECrop
 	 * @param entity entity colliding
-	 * @return Whether trampling calculation should happen, return false if the plant is no longer valid. 
+	 * @return Whether trampling calculation should happen, return false if the plant is no longer valid.
 	 */
 	public boolean onEntityCollision(TECrop crop, Entity entity)
 	{
@@ -300,8 +331,8 @@ public abstract class CropCard
 		}
 		return false;
 	}
-	
-	
+
+
 	/**
 	 * Called every time the crop ticks.
 	 * Should be called every 256 ticks or around 13 seconds.
@@ -309,7 +340,7 @@ public abstract class CropCard
 	 * @param crop reference to TECrop
 	 */
 	public void tick(TECrop crop) {}
-	
+
 	/**
 	 * Check whether this plant spreads weed to surrounding tiles.
 	 * Default is true if the plant has a high growth stat (or is weeds) and size greater or equal than 2.
@@ -321,8 +352,8 @@ public abstract class CropCard
 	{
 		return crop.size>=2 && (crop.id==0 || crop.statGrowth>=24);
 	}
-	
-	
+
+
 	/**
 	 * Get this plant's ID.
 	 * 
@@ -339,22 +370,22 @@ public abstract class CropCard
 		}
 		return -1;
 	}
-	
+
 	private static final CropCard[] cropCardList = new CropCard[256];
-	
+
 	/**
-	 * Get the size of the plant list. 
+	 * Get the size of the plant list.
 	 * 
 	 * @return Plant list size
 	 */
 	public static int cropCardListLength() {return cropCardList.length;}
-	
+
 	/**
 	 * Return the CropCard assigned to the given ID.
 	 * If the ID is out of bounds, weed should be returned. If the ID is not registered, weed should be returned and a console print will notify.
 	 * 
 	 * @param id plant ID
-	 * @return Plant class 
+	 * @return Plant class
 	 */
 	public static final CropCard getCrop(int id)
 	{
@@ -367,10 +398,10 @@ public abstract class CropCard
 			System.out.println("[IndustrialCraft] Something tried to access non-existant cropID #"+id+"!!!");
 			return cropCardList[0];
 		}
-		
+
 		return cropCardList[id];
 	}
-	
+
 	/**
 	 * Check whether the specified plant ID is already assigned.
 	 * @param id ID to be checked
@@ -380,7 +411,7 @@ public abstract class CropCard
 	{
 		return !(id < 0 || id >= cropCardList.length || cropCardList[id]==null);
 	}
-	
+
 	/**
 	 * Auto-assign an ID to a plant and register it.
 	 * Usage of this method is not recommended! Other plants could take your IDs and cause your plants to turn into other plants.
@@ -395,14 +426,14 @@ public abstract class CropCard
 			if (cropCardList[x]==null)
 			{// Found empty slot, add crop here
 				cropCardList[x]=crop;
-				nameReference.addLocal("item.cropSeed"+x+".name", crop.name()+" Seeds");
+				nameReference.addLocal("ic2.cropSeed"+x, crop.name()+" Seeds");
 				return x;
 			}
 		}
 		//No free slot avaible
 		return -1;
 	}
-	
+
 	/**
 	 * Attempt to register a plant to an ID.
 	 * If the ID is taken, the crop will not be registered and a console print will notify the user.
@@ -420,7 +451,7 @@ public abstract class CropCard
 		if (cropCardList[i]==null)
 		{
 			cropCardList[i]=crop;
-			nameReference.addLocal("item.cropSeed"+i+".name", crop.name()+" Seeds");
+			nameReference.addLocal("ic2.cropSeed"+i, crop.name()+" Seeds");
 			return true;
 		}
 		System.out.println("[IndustrialCraft] Cannot add crop:"+crop.name()+" on ID #"+i+", slot already occupied by crop:"+cropCardList[i].name());
@@ -431,9 +462,9 @@ public abstract class CropCard
 	 * For internal usage only.
 	 */
 	public static TECrop nameReference;
-	
+
 	private static HashMap<ItemStack, BaseSeed> baseseeds = new HashMap<ItemStack, BaseSeed>();
-	
+
 	/**
 	 * Registers a base seed, an item used to plant a crop.
 	 * 
@@ -447,13 +478,13 @@ public abstract class CropCard
 	 */
 	public static boolean registerBaseSeed(ItemStack stack, int id, int size, int growth, int gain, int resistance)
 	{
-		for (ItemStack key : baseseeds.keySet()) 
+		for (ItemStack key : baseseeds.keySet())
 			if (key.itemID==stack.itemID && key.getItemDamage()==stack.getItemDamage()) return false;
-		
+
 		baseseeds.put(stack, new BaseSeed(id, size, growth, gain, resistance, stack.stackSize));
 		return true;
 	}
-	
+
 	/**
 	 * Finds a base seed from the given item.
 	 * 
@@ -472,4 +503,21 @@ public abstract class CropCard
 		}
 		return null;
 	}
+
+	/**
+	 * Execute registerSprites for all registered crop cards.
+	 * 
+	 * This method will get called by IC2, don't call it yourself.
+	 */
+	@SideOnly(Side.CLIENT)
+	public static final void startSpriteRegistration(IconRegister iconRegister) {
+		for (CropCard cropCard : cropCardList) {
+			if (cropCard == null) break;
+
+			cropCard.registerSprites(iconRegister);
+		}
+	}
+
+	@SideOnly(Side.CLIENT)
+	protected Icon textures[];
 }

@@ -141,13 +141,13 @@ public class BlockCompactSolar extends BlockContainer {
 
 	@Override
 	@SideOnly(Side.CLIENT)
-	public void func_94332_a(IconRegister par1IconRegister)
+	public void registerIcons(IconRegister par1IconRegister)
 	{
 	    for (CompactSolarType typ: CompactSolarType.values()) {
 	        for (int i = 0; i < 3; i++) {
 	            String side = i == 0 ? "bottom" : i == 1 ? "top" : "side";
 	            String texName = String.format("compactsolars:block%s%s",typ.name(),side);
-	            textures[typ.ordinal()][i]=par1IconRegister.func_94245_a(texName);
+	            textures[typ.ordinal()][i]=par1IconRegister.registerIcon(texName);
 	        }
 	    }
 	}
