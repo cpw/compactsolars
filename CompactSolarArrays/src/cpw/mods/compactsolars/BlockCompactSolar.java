@@ -143,6 +143,7 @@ public class BlockCompactSolar extends BlockContainer {
 	@SideOnly(Side.CLIENT)
 	public void registerIcons(IconRegister par1IconRegister)
 	{
+	    textures = new Icon[CompactSolarType.values().length][3];
 	    for (CompactSolarType typ: CompactSolarType.values()) {
 	        for (int i = 0; i < 3; i++) {
 	            String side = i == 0 ? "bottom" : i == 1 ? "top" : "side";
