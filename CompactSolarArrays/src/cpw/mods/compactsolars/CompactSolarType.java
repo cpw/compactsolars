@@ -82,7 +82,7 @@ public enum CompactSolarType {
 
 	public ItemSolarHat buildHat(Configuration cfg, int id)
 	{
-        int itemId = cfg.get(Configuration.CATEGORY_ITEM, hatName, id).getInt(id);
+        int itemId = cfg.getItem(hatName, id).getInt(id);
         item = new ItemSolarHat(itemId, this);
         item.setUnlocalizedName(hatName);
         GameRegistry.registerItem(item, hatName);
@@ -100,7 +100,7 @@ public enum CompactSolarType {
 
     public static void generateHatRecipes(BlockCompactSolar block)
     {
-        Item ironHat = Item.helmetSteel;
+        Item ironHat = Item.helmetIron;
         for (CompactSolarType typ : values())
         {
             ItemStack solarBlock = new ItemStack(block, 0, typ.ordinal());
