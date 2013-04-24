@@ -94,7 +94,7 @@
     <property name="jarname" value="${modname}-universal-${version.minecraft}-${version}" />
     <mkdir dir="${basedir}/target" />
     <jar destfile="${basedir}/target/${jarname}.zip">
-      <fileset dir="${mcp.obfoutput.classes}" includes="**/*.class" />
+      <fileset dir="${mcp.obfoutput.classes}" includes="cpw/**/*.class" />
       <zipfileset dir="${basedir}" includes="version.properties"/>
       <mappedresources>
         <concat>

@@ -10,7 +10,7 @@
  ******************************************************************************/
 package cpw.mods.compactsolars;
 
-import ic2.api.Items;
+import ic2.api.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
 import net.minecraftforge.common.Configuration;

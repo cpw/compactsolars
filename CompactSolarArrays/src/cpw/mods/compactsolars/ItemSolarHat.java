@@ -3,8 +3,8 @@ package cpw.mods.compactsolars;
 import java.util.Map;
 import java.util.Random;
 
-import ic2.api.ElectricItem;
-import ic2.api.IElectricItem;
+import ic2.api.item.ElectricItem;
+import ic2.api.item.IElectricItem;
 
 import org.w3c.dom.events.EventException;
 
