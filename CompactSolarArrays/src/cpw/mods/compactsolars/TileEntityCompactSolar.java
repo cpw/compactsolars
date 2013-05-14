@@ -47,6 +47,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	private boolean canRain;
 	private boolean noSunlight;
 	private boolean compatibilityMode;
+	public boolean addedToEnergyNet = false;
 
 	public TileEntityCompactSolar() {
 		this(CompactSolarType.LV);
@@ -68,8 +69,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 			if (worldObj.isRemote) {
 				NetworkHelper.requestInitialData(this);
 			} else {
-			    EnergyTileLoadEvent loadEvent = new EnergyTileLoadEvent(this);
-			    MinecraftForge.EVENT_BUS.post(loadEvent);
+				this.onLoaded();
 			}
 			canRain=worldObj.getWorldChunkManager().getBiomeGenAt(xCoord, zCoord).getIntRainfall()>0;
 			noSunlight=worldObj.provider.hasNoSky;
@@ -260,10 +260,31 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	}
 
 	@Override
-	public void invalidate() {
-	    EnergyTileUnloadEvent unloadEvent = new EnergyTileUnloadEvent(this);
-	    MinecraftForge.EVENT_BUS.post(unloadEvent);
+	public void invalidate()
+	{
+		if (this.addedToEnergyNet)
+		{
+			this.onUnloaded();
+		}
+
+		super.invalidate();
 	}
+
+	public void onLoaded()
+	{
+		MinecraftForge.EVENT_BUS.post(new EnergyTileLoadEvent(this));
+		this.addedToEnergyNet = true;
+	}
+
+	public void onUnloaded()
+	{
+		if (this.addedToEnergyNet)
+		{
+			MinecraftForge.EVENT_BUS.post(new EnergyTileUnloadEvent(this));
+			this.addedToEnergyNet = false;
+		}
+	}
+
 	@Override
 	public ItemStack getStackInSlotOnClosing(int var1) {
     if (this.inventory[var1] != null)
