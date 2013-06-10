@@ -27,7 +27,6 @@ import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumHelper;
-import net.minecraftforge.common.IArmorTextureProvider;
 import net.minecraftforge.common.ISpecialArmor;
 
 public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
@@ -99,7 +98,7 @@ public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
                 if (is.getItem() instanceof IElectricItem)
                 {
                     IElectricItem electricItem = (IElectricItem) is.getItem();
-                    available -= ElectricItem.charge(is, available, type.ordinal()+1, false, false);
+                    available -= ElectricItem.manager.charge(is, available, type.ordinal()+1, false, false);
                 }
 
             }

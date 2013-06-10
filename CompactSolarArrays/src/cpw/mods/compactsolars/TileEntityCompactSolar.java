@@ -88,7 +88,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 			energyProduction = generateEnergy();
 		}
 		if (energyProduction > 0 && inventory[0] != null && (Item.itemsList[inventory[0].itemID] instanceof IElectricItem)) {
-			int leftovers = ElectricItem.charge(inventory[0], energyProduction, type.ordinal()+1, false, false);
+			int leftovers = ElectricItem.manager.charge(inventory[0], energyProduction, type.ordinal()+1, false, false);
 			energyProduction -= leftovers;
 		}
 		if (energyProduction > 0) {
