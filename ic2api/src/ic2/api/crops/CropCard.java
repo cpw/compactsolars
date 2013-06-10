@@ -1,7 +1,5 @@
 package ic2.api.crops;
 
-import java.util.HashMap;
-
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
@@ -14,21 +12,21 @@ import cpw.mods.fml.relauncher.SideOnly;
 
 /**
  * Base agriculture crop.
- *
+ * 
  * Any crop extending this can be registered using registerCrop to be added into the game.
  */
 public abstract class CropCard
 {
 	/**
 	 * Plant name. Will be displayed to the player.
-	 *
+	 * 
 	 * @return Plant name
 	 */
 	public abstract String name();
 
 	/**
 	 * Your name here, will be shown in "Discovered by:" when analyzing seeds.
-	 *
+	 * 
 	 * @return Your name
 	 */
 	public String discoveredBy() {return "Alblaka";}
@@ -36,7 +34,7 @@ public abstract class CropCard
 	/**
 	 * Description of your plant. Keep it short, a few characters per line for up to two lines.
 	 * Default is showing attributes of your plant, 2 per line.
-	 *
+	 * 
 	 * @param i line to get, starting from 0
 	 * @return The line
 	 */
@@ -66,7 +64,7 @@ public abstract class CropCard
 	/**
 	 * Tier of the plant. Ranges from 1 to 16, 0 is Weed.
 	 * Valuable and powerful crops have higher tiers, useless and weak ones have lower tiers.
-	 *
+	 * 
 	 * @return Tier
 	 */
 	public abstract int tier();
@@ -74,14 +72,14 @@ public abstract class CropCard
 	/**
 	 * Describe the plant through a set of stats, influencing breeding.
 	 * Plants sharing stats and attributes will tend to cross-breed more often.
-	 *
+	 * 
 	 * Stats:
 	 * - 0: Chemistry (Industrial uses based on chemical plant components)
 	 * - 1: Consumable (Food, potion ingredients, stuff meant to be eaten or similarly used)
 	 * - 2: Defensive (Plants with defense capabilities (damaging, explosive, chemical) or special abilities in general)
 	 * - 3: Colorful (How colorful/aesthetically/beautiful is the plant, like dye-plants or plants without actual effects)
 	 * - 4: Weed (Is this plant weed-like and rather unwanted/quick-spreading? Rare super-breed plants should have low values here)
-	 *
+	 * 
 	 * @param n index of the requested stat
 	 * @return The requested value of the stats
 	 */
@@ -90,21 +88,21 @@ public abstract class CropCard
 	/**
 	 * Additional attributes of the plant, also influencing breeding.
 	 * Plants sharing stats and attributes will tend to cross-breed more often.
-	 *
+	 * 
 	 * @return Attributes as an array of strings
 	 */
 	public abstract String[] attributes();
 
 	/**
 	 * Determine the max crop size.
-	 *
+	 * 
 	 * Currently only used for texture allocation.
 	 */
 	public abstract int maxSize();
 
 	/**
 	 * Instantiate your Icons here.
-	 *
+	 * 
 	 * This method will get called by IC2, don't call it yourself.
 	 */
 	@SideOnly(Side.CLIENT)
@@ -118,7 +116,7 @@ public abstract class CropCard
 
 	/**
 	 * Sprite the crop is meant to be rendered with.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return 0-255, representing the sprite index on the crop's spritesheet.
 	 */
@@ -149,15 +147,15 @@ public abstract class CropCard
 
 	/**
 	 * Check whether the plant can grow further.
-	 *
+	 * 
 	 * Consider:
 	 * - Humidity, nutrients and air quality
 	 * - Current size
 	 * - Light level
 	 * - Special biomes or conditions, accessible through crop.worldObj
-	 *
+	 * 
 	 * This method will be called upon empty upgraded crops to check whether a neighboring plant can cross onto it! Don't check if the size is greater than 0 and if the ID is real.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Whether the crop can grow
 	 */
@@ -167,9 +165,9 @@ public abstract class CropCard
 	 * Calculate the influence for the plant to grow based on humidity, nutrients and air.
 	 * Normal behavior is rating the three stats "normal", with each of them ranging from 0-30.
 	 * Basic rule: Assume everything returns 10. All together must equal 30. Add the factors to your likings, for example (humidity*0.7)+(nutrients*0.9)+(air*1.4)
-	 *
+	 * 
 	 * Default is humidity + nutrients + air (no factors).
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @param humidity ground humidity, influenced by hydration
 	 * @param nutrients nutrient quality in ground, based on fertilizers
@@ -184,7 +182,7 @@ public abstract class CropCard
 	/**
 	 * Used to determine whether the plant can crossbreed with another crop.
 	 * Default is allow crossbreeding if the size is greater or equal than 3.
-	 *
+	 * 
 	 * @param crop crop to crossbreed with
 	 */
 	public boolean canCross(ICropTile crop)
@@ -196,7 +194,7 @@ public abstract class CropCard
 	/**
 	 * Called when the plant is rightclicked by a player.
 	 * Default action is harvesting.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @param player player rightclicking the crop
 	 * @return Whether the plant has changed
@@ -208,7 +206,7 @@ public abstract class CropCard
 
 	/**
 	 * Check whether the crop can be harvested.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Whether the crop can be harvested in its current state.
 	 */
@@ -217,7 +215,7 @@ public abstract class CropCard
 	/**
 	 * Base chance for dropping the plant's gains, specify values greater than 1 for multiple drops.
 	 * Default is 0.95^tier.
-	 *
+	 * 
 	 * @return Chance to drop the gains
 	 */
 	public float dropGainChance()
@@ -229,7 +227,7 @@ public abstract class CropCard
 
 	/**
 	 * Item obtained from harvesting the plant.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Item obtained
 	 */
@@ -238,7 +236,7 @@ public abstract class CropCard
 	/**
 	 * Get the size of the plant after harvesting.
 	 * Default is 1.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Plant size after harvesting
 	 */
@@ -248,7 +246,7 @@ public abstract class CropCard
 	/**
 	 * Called when the plant is leftclicked by a player.
 	 * Default action is picking the plant.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @param player player leftclicked the crop
 	 * @return Whether the plant has changed
@@ -261,7 +259,7 @@ public abstract class CropCard
 	/**
 	 * Base chance for dropping seeds when the plant is picked.
 	 * Default is 0.5*0.8^tier with a bigger chance for sizes greater than 2 and absolutely no chance for size 0.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Chance to drop the seeds
 	 */
@@ -278,7 +276,7 @@ public abstract class CropCard
 	 * Obtain seeds dropped when the plant is picked.
 	 * Multiple drops of the returned ItemStack can occur.
 	 * Default action is generating a seed from this crop.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Seeds
 	 */
@@ -289,28 +287,28 @@ public abstract class CropCard
 
 	/**
 	 * Called when a neighbor block to the crop has changed.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 */
 	public void onNeighbourChange(ICropTile crop){}
 
 	/**
 	 * Check if the crop should emit redstone.
-	 *
+	 * 
 	 * @return Whether the crop should emit redstone
 	 */
 	public int emitRedstone(ICropTile crop){return 0;}
 
 	/**
 	 * Called when the crop is destroyed.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 */
 	public void onBlockDestroyed(ICropTile crop){}
 
 	/**
 	 * Get the light value emitted by the plant.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Light value emitted
 	 */
@@ -318,7 +316,7 @@ public abstract class CropCard
 
 	/**
 	 * Default is true if the entity is an EntityLiving in jumping or sprinting state.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @param entity entity colliding
 	 * @return Whether trampling calculation should happen, return false if the plant is no longer valid.
@@ -336,7 +334,7 @@ public abstract class CropCard
 	/**
 	 * Called every time the crop ticks.
 	 * Should be called every 256 ticks or around 13 seconds.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 */
 	public void tick(ICropTile crop) {}
@@ -344,7 +342,7 @@ public abstract class CropCard
 	/**
 	 * Check whether this plant spreads weed to surrounding tiles.
 	 * Default is true if the plant has a high growth stat (or is weeds) and size greater or equal than 2.
-	 *
+	 * 
 	 * @param crop reference to ICropTile
 	 * @return Whether the plant spreads weed
 	 */
@@ -356,7 +354,7 @@ public abstract class CropCard
 
 	/**
 	 * Get this plant's ID.
-	 *
+	 * 
 	 * @return ID of this CropCard or -1 if it's not registered
 	 */
 	public final int getId()
