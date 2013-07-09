@@ -1,33 +1,32 @@
 package cpw.mods.compactsolars;
 
-import java.util.Map;
-import java.util.Random;
-
 import ic2.api.item.ElectricItem;
 import ic2.api.item.IElectricItem;
 
-import org.w3c.dom.events.EventException;
-
-import com.google.common.collect.MapMaker;
-import com.google.common.math.IntMath;
-
-import cpw.mods.fml.relauncher.Side;
-import cpw.mods.fml.relauncher.SideOnly;
+import java.util.Map;
+import java.util.Random;
 
 import net.minecraft.client.renderer.texture.IconRegister;
 import net.minecraft.entity.Entity;
 import net.minecraft.entity.EntityLiving;
+import net.minecraft.entity.EntityLivingBase;
 import net.minecraft.entity.player.EntityPlayer;
-import net.minecraft.item.EnumArmorMaterial;
 import net.minecraft.item.ItemArmor;
 import net.minecraft.item.ItemStack;
 import net.minecraft.potion.Potion;
 import net.minecraft.potion.PotionEffect;
 import net.minecraft.util.DamageSource;
 import net.minecraft.util.MathHelper;
+import net.minecraft.util.ResourceLocation;
 import net.minecraft.world.World;
 import net.minecraftforge.common.EnumHelper;
 import net.minecraftforge.common.ISpecialArmor;
+
+import com.google.common.collect.MapMaker;
+import com.google.common.math.IntMath;
+
+import cpw.mods.fml.relauncher.Side;
+import cpw.mods.fml.relauncher.SideOnly;
 
 public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     private class PlayerState {
@@ -43,12 +42,13 @@ public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     {
         super(par1, EnumHelper.addArmorMaterial("COMPACTSOLARHAT", 1, new int[] { 1, 1, 1, 1}, 1), 0, 0);
         this.type = type;
+        setUnlocalizedName("compactsolars:"+type.hatName);
     }
 
     @Override
     public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer)
     {
-        return type.hatTexture;
+        return type.hatTexture.toString();
     }
 
     @Override
@@ -126,7 +126,7 @@ public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     }
 
     @Override
-    public ArmorProperties getProperties(EntityLiving player, ItemStack armor, DamageSource source, double damage, int slot)
+    public ArmorProperties getProperties(EntityLivingBase player, ItemStack armor, DamageSource source, double damage, int slot)
     {
         return new ArmorProperties(0, 0, 0);
     }
@@ -138,7 +138,7 @@ public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     }
 
     @Override
-    public void damageArmor(EntityLiving entity, ItemStack stack, DamageSource source, int damage, int slot)
+    public void damageArmor(EntityLivingBase entity, ItemStack stack, DamageSource source, int damage, int slot)
     {
         return;
     }
@@ -147,6 +147,6 @@ public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     @SideOnly(Side.CLIENT)
     public void registerIcons(IconRegister par1IconRegister)
     {
-        this.itemIcon = par1IconRegister.registerIcon(type.hatItemTexture);
+        this.itemIcon = par1IconRegister.registerIcon(type.hatItemTexture.toString());
     }
 }

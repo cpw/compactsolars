@@ -32,6 +32,6 @@ public class ItemCompactSolar extends ItemBlockWithMetadata {
 	@Override
 	public String getUnlocalizedName(ItemStack itemstack)
 	{
-		return CompactSolarType.values()[itemstack.getItemDamage()].name();
+		return "tile.compactsolars:"+CompactSolarType.values()[itemstack.getItemDamage()].name()+"_block";
 	}
 }

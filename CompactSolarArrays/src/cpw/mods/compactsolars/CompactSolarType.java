@@ -13,6 +13,7 @@ package cpw.mods.compactsolars;
 import ic2.api.item.Items;
 import net.minecraft.item.Item;
 import net.minecraft.item.ItemStack;
+import net.minecraft.util.ResourceLocation;
 import net.minecraftforge.common.Configuration;
 
 import com.google.common.base.Throwables;
@@ -29,10 +30,10 @@ public enum CompactSolarType {
 	public Class<? extends TileEntityCompactSolar> clazz;
 	public String friendlyName;
 	public String transformerName;
-	public final String hatTexture;
-    private String hatName;
+	public final ResourceLocation hatTexture;
+    public final String hatName;
     private ItemSolarHat item;
-    public final String hatItemTexture;
+    public final ResourceLocation hatItemTexture;
 
 	private CompactSolarType(int output, String friendlyName, String transformerName, Class<? extends TileEntityCompactSolar> clazz, String hatTexture) {
 		this.output=output;
@@ -40,8 +41,8 @@ public enum CompactSolarType {
 		this.transformerName=transformerName;
 		this.clazz=clazz;
 		this.hatName = "solarHat"+name();
-		this.hatTexture = "/mods/compactsolars/textures/armor/"+hatTexture+".png";
-		this.hatItemTexture = "compactsolars:"+hatTexture;
+		this.hatTexture = new ResourceLocation("compactsolars","textures/armor/"+hatTexture+".png");
+		this.hatItemTexture = new ResourceLocation("compactsolars",hatTexture);
 	}
 
 	public static void generateRecipes(BlockCompactSolar block) {
@@ -84,9 +85,7 @@ public enum CompactSolarType {
 	{
         int itemId = cfg.getItem(hatName, id).getInt(id);
         item = new ItemSolarHat(itemId, this);
-        item.setUnlocalizedName(hatName);
         GameRegistry.registerItem(item, hatName);
-        LanguageRegistry.instance().addStringLocalization("item."+hatName+".name", name()+" Solar Hat");
         return item;
 	}
 

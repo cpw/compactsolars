@@ -287,7 +287,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
         return false;
     }
     @Override
-    public boolean isStackValidForSlot(int i, ItemStack itemstack)
+    public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
         return itemstack !=null && itemstack.getItem() instanceof IElectricItem;
     }

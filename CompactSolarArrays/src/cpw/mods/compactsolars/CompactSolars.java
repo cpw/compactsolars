@@ -16,11 +16,8 @@ import net.minecraftforge.common.Configuration;
 import net.minecraftforge.common.Property;
 import cpw.mods.fml.common.FMLLog;
 import cpw.mods.fml.common.Mod;
-import cpw.mods.fml.common.Mod.Init;
+import cpw.mods.fml.common.Mod.EventHandler;
 import cpw.mods.fml.common.Mod.Instance;
-import cpw.mods.fml.common.Mod.PostInit;
-import cpw.mods.fml.common.Mod.PreInit;
-import cpw.mods.fml.common.Mod.ServerStopping;
 import cpw.mods.fml.common.SidedProxy;
 import cpw.mods.fml.common.event.FMLInitializationEvent;
 import cpw.mods.fml.common.event.FMLPostInitializationEvent;
@@ -31,8 +28,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[1.115.304,);required-after:Forge@[7.7,)")
-@NetworkMod(clientSideRequired=false,serverSideRequired=false,versionBounds="[4.1,)")
+@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[1.115.304,);required-after:Forge@[9.10,)")
+@NetworkMod(clientSideRequired=false,serverSideRequired=false,versionBounds="[4.2,)")
 public class CompactSolars {
   @SidedProxy(clientSide="cpw.mods.compactsolars.client.ClientProxy", serverSide="cpw.mods.compactsolars.CommonProxy")
 	public static CommonProxy proxy;
@@ -41,7 +38,7 @@ public class CompactSolars {
 	@Instance("CompactSolars")
 	public static CompactSolars instance;
 
-	@PreInit
+	@EventHandler
 	public void preInit(FMLPreInitializationEvent preinit) {
 		Version.init(preinit.getVersionProperties());
         preinit.getModMetadata().version = Version.version();
@@ -65,11 +62,10 @@ public class CompactSolars {
 			cfg.save();
 		}
 	}
-	@Init
+    @EventHandler
 	public void load(FMLInitializationEvent init) {
 		GameRegistry.registerBlock(compactSolarBlock, ItemCompactSolar.class, "CompactSolarBlock");
 		for (CompactSolarType typ : CompactSolarType.values()) {
-			LanguageRegistry.instance().addStringLocalization(typ.name() + ".name", typ.friendlyName);
 			GameRegistry.registerTileEntity(typ.clazz, typ.tileEntityName());
 		}
 		proxy.registerTileEntityRenderers();
@@ -77,13 +73,13 @@ public class CompactSolars {
 		NetworkRegistry.instance().registerGuiHandler(this, proxy);
 	}
 
-	@PostInit
+    @EventHandler
 	public void modsLoaded(FMLPostInitializationEvent postinit) {
 		CompactSolarType.generateRecipes(compactSolarBlock);
 		CompactSolarType.generateHatRecipes(compactSolarBlock);
 	}
 
-	@ServerStopping
+    @EventHandler
 	public void resetMap(FMLServerStoppingEvent evt)
 	{
 	    ItemSolarHat.clearRaining();

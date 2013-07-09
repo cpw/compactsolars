@@ -13,6 +13,7 @@ package cpw.mods.compactsolars.client;
 import net.minecraft.client.gui.inventory.GuiContainer;
 import net.minecraft.inventory.Container;
 import net.minecraft.inventory.IInventory;
+import net.minecraft.util.ResourceLocation;
 
 import org.lwjgl.opengl.GL11;
 
@@ -21,6 +22,7 @@ import cpw.mods.compactsolars.ContainerCompactSolar;
 import cpw.mods.compactsolars.TileEntityCompactSolar;
 
 public class GUISolar extends GuiContainer {
+    public static final ResourceLocation gui = new ResourceLocation("ic2","textures/gui/GUISolarGenerator.png");
 	public enum GUI {
 		LV(CompactSolarType.LV),
 		MV(CompactSolarType.MV),
@@ -63,7 +65,7 @@ public class GUISolar extends GuiContainer {
 	@Override
 	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
-        mc.renderEngine.bindTexture("/mods/ic2/textures/gui/GUISolarGenerator.png");
+        mc.renderEngine.func_110577_a(gui);
         int l = (width - xSize) / 2;
         int i1 = (height - ySize) / 2;
         drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
