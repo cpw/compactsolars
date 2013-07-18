@@ -1,0 +1,7 @@
+tile.HV_block.name=Hochspannungssolararray
+tile.MV_block.name=Mittelspannungssolararray
+tile.LV_block.name=Niederspannungssolararray
+
+item.HVhat.name=Hochspannungssolarhut
+item.MVhat.name=Mittelspannungssolarhut
+item.LVhat.name=Niederspannungssolarhut
