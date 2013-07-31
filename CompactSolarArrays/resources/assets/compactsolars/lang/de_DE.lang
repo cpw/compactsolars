@@ -1,6 +1,6 @@
-tile.HV_block.name=Hochspannungssolarareal
-tile.MV_block.name=Mittelspannungssolarareal
-tile.LV_block.name=Niederspannungssolarareal
+tile.HV_block.name=Hochspannungssolaranlage
+tile.MV_block.name=Mittelspannungssolaranlage
+tile.LV_block.name=Niederspannungssolaranlage
 
 item.HVhat.name=Hochspannungssolarhut
 item.MVhat.name=Mittelspannungssolarhut
