@@ -1,0 +1,6 @@
+tile.HV_block.name=Högspänningssolpanel
+tile.MV_block.name=Mellanspänningssolpanel
+tile.LV_block.name=Lågspänningssolpanel
+item.HVhat.name=Högspänningssolhatt
+item.MVhat.name=Mellanspänningssolhatt
+item.LVhat.name=Lågspänningssolhatt
