@@ -16,7 +16,6 @@ import ic2.api.item.IElectricItem;
 import ic2.api.tile.IWrenchable;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
-import ic2.api.energy.event.EnergyTileSourceEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.network.INetworkDataProvider;
@@ -34,6 +33,7 @@ import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.nbt.NBTTagList;
 import net.minecraft.tileentity.TileEntity;
+import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 
 public class TileEntityCompactSolar extends TileEntity implements IInventory, IEnergySource, INetworkDataProvider, INetworkUpdateListener,
@@ -46,7 +46,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	private int tick;
 	private boolean canRain;
 	private boolean noSunlight;
-	private boolean compatibilityMode;
+    private double currentEnergy;
 
 	public TileEntityCompactSolar() {
 		this(CompactSolarType.LV);
@@ -57,17 +57,11 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		this.inventory=new ItemStack[1];
 		this.tick=random.nextInt(64);
 	}
-	@Override
-	public boolean emitsEnergyTo(TileEntity receiver, Direction direction) {
-		return true;
-	}
 
 	@Override
 	public void updateEntity() {
 		if (!initialized && worldObj != null) {
-			if (worldObj.isRemote) {
-				NetworkHelper.requestInitialData(this);
-			} else {
+			if (!worldObj.isRemote) {
 			    EnergyTileLoadEvent loadEvent = new EnergyTileLoadEvent(this);
 			    MinecraftForge.EVENT_BUS.post(loadEvent);
 			}
@@ -92,8 +86,11 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 			energyProduction -= leftovers;
 		}
 		if (energyProduction > 0) {
-		    EnergyTileSourceEvent sourceEvent = new EnergyTileSourceEvent(this, energyProduction);
-		    MinecraftForge.EVENT_BUS.post(sourceEvent);
+		    this.currentEnergy = energyProduction;
+		}
+		else
+		{
+		    this.currentEnergy = 0;
 		}
 	}
 
@@ -106,10 +103,6 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		return type.getOutput();
 	}
 
-	@Override
-	public boolean isAddedToEnergyNet() {
-		return initialized;
-	}
 
 	@Override
 	public void onNetworkUpdate(String field) {
@@ -120,11 +113,6 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	@Override
 	public List<String> getNetworkedFields() {
 		return fields;
-	}
-
-	@Override
-	public int getMaxEnergyOutput() {
-		return type.getOutput();
 	}
 
 	public ItemStack[] getContents() {
@@ -290,5 +278,20 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
     public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
         return itemstack !=null && itemstack.getItem() instanceof IElectricItem;
+    }
+    @Override
+    public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction)
+    {
+        return true;
+    }
+    @Override
+    public double getOfferedEnergy()
+    {
+        return currentEnergy;
+    }
+    @Override
+    public void drawEnergy(double amount)
+    {
+        currentEnergy -= amount;
     }
 }

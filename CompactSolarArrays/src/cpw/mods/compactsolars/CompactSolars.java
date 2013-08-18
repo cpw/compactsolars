@@ -28,8 +28,8 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[1.118,);required-after:Forge@[9.10,)")
-@NetworkMod(clientSideRequired=false,serverSideRequired=false,versionBounds="[4.3,)")
+@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[2.0,);required-after:Forge@[9.10,)")
+@NetworkMod(clientSideRequired=false,serverSideRequired=false,versionBounds="[4.4,)")
 public class CompactSolars {
   @SidedProxy(clientSide="cpw.mods.compactsolars.client.ClientProxy", serverSide="cpw.mods.compactsolars.CommonProxy")
 	public static CommonProxy proxy;
