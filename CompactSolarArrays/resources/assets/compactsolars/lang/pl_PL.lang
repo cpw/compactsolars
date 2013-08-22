@@ -1,7 +1,7 @@
-tile.HV_block.name=Panel słoneczny wysokiego napięcia
-tile.MV_block.name=Panel słoneczny średniego napięcia
-tile.LV_block.name=Panel słoneczny niskiego napięcia
+tile.compactsolars:HV_block.name=Panel słoneczny wysokiego napięcia
+tile.compactsolars:MV_block.name=Panel słoneczny średniego napięcia
+tile.compactsolars:LV_block.name=Panel słoneczny niskiego napięcia
 
-item.HVhat.name=Hełm słoneczny wysokiego napięcia
-item.MVhat.name=Hełm słoneczny średniego napięcia
-item.LVhat.name=Hełm słoneczny niskiego napięcia
+item.compactsolars:solarHatHV.name=Hełm słoneczny wysokiego napięcia
+item.compactsolars:solarHatMV.name=Hełm słoneczny średniego napięcia
+item.compactsolars:solarHatLV.name=Hełm słoneczny niskiego napięcia

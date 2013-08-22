@@ -1,7 +1,7 @@
-tile.HV_block.name=Солнечная батарея высокого напряжения
-tile.MV_block.name=Солнечная батарея среднего напряжения
-tile.LV_block.name=Солнечная батарея низкого напряжения
+tile.compactsolars:HV_block.name=Солнечная батарея высокого напряжения
+tile.compactsolars:MV_block.name=Солнечная батарея среднего напряжения
+tile.compactsolars:LV_block.name=Солнечная батарея низкого напряжения
 
-item.HVhat.name=ХВСП-шлем
-item.MVhat.name=МВСП-шлем
-item.LVhat.name=ЛВСП-шлем
+item.compactsolars:solarHatHV.name=ХВСП-шлем
+item.compactsolars:solarHatMV.name=МВСП-шлем
+item.compactsolars:solarHatLV.name=ЛВСП-шлем

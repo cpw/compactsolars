@@ -1,7 +1,7 @@
-tile.HV_block.name=Højspænding Solcelleanlæg
-tile.MV_block.name=Mellemspænding Solcelleanlæg
-tile.LV_block.name=Lavspænding Solcelleanlæg
+tile.compactsolars:HV_block.name=Højspænding Solcelleanlæg
+tile.compactsolars:MV_block.name=Mellemspænding Solcelleanlæg
+tile.compactsolars:LV_block.name=Lavspænding Solcelleanlæg
 
-item.HVhat.name=Højspænding Sol Hat
-item.MVhat.name=Mellemspænding Sol Hat
-item.LVhat.name=Lavspænding Sol Hat
+item.compactsolars:solarHatHV.name=Højspænding Sol Hat
+item.compactsolars:solarHatMV.name=Mellemspænding Sol Hat
+item.compactsolars:solarHatLV.name=Lavspænding Sol Hat

@@ -1,7 +1,7 @@
-tile.HV_block.name=Hochspannungssolaranlage
-tile.MV_block.name=Mittelspannungssolaranlage
-tile.LV_block.name=Niederspannungssolaranlage
+tile.compactsolars:HV_block.name=Hochspannungssolaranlage
+tile.compactsolars:MV_block.name=Mittelspannungssolaranlage
+tile.compactsolars:LV_block.name=Niederspannungssolaranlage
 
-item.HVhat.name=Hochspannungssolarhut
-item.MVhat.name=Mittelspannungssolarhut
-item.LVhat.name=Niederspannungssolarhut
+item.compactsolars:solarHatHV.name=Hochspannungssolarhut
+item.compactsolars:solarHatMV.name=Mittelspannungssolarhut
+item.compactsolars:solarHatLV.name=Niederspannungssolarhut

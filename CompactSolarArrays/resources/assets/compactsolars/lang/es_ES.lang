@@ -1,7 +1,7 @@
-tile.HV_block.name=Mayor Voltaje Colección de Paneles Solares
-tile.MV_block.name=Medio Voltaje Colección de Paneles Solares
-tile.LV_block.name=Modíco Voltaje Colección de Paneles Solares
+tile.compactsolars:HV_block.name=Mayor Voltaje Colección de Paneles Solares
+tile.compactsolars:MV_block.name=Medio Voltaje Colección de Paneles Solares
+tile.compactsolars:LV_block.name=Modíco Voltaje Colección de Paneles Solares
 
-item.HVhat.name=Mayor Voltaje Gorra Solar
-item.MVhat.name=Medio Voltaje Gorra Solar
-item.LVhat.name=Modíco Voltaje Gorra Solar
+item.compactsolars:solarHatHV.name=Mayor Voltaje Gorra Solar
+item.compactsolars:solarHatMV.name=Medio Voltaje Gorra Solar
+item.compactsolars:solarHatLV.name=Modíco Voltaje Gorra Solar
