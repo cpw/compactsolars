@@ -1,7 +1,7 @@
-tile.HV_block.name=Ordenador Solar de Alta Voltagem
-tile.MV_block.name=Ordenador Solar de Média Voltagem
-tile.LV_block.name=Ordenador Solar de Baixa Voltagem
+tile.compactsolars:HV_block.name=Ordenador Solar de Alta Voltagem
+tile.compactsolars:MV_block.name=Ordenador Solar de Média Voltagem
+tile.compactsolars:LV_block.name=Ordenador Solar de Baixa Voltagem
 
-item.HVhat.name=Elmo Solar de Alta Voltagem
-item.MVhat.name=Elmo Solar de Média Voltagem
-item.LVhat.name=Elmo Solar de Baixa Voltagem
+item.compactsolars:solarHatHV.name=Elmo Solar de Alta Voltagem
+item.compactsolars:solarHatMV.name=Elmo Solar de Média Voltagem
+item.compactsolars:solarHatLV.name=Elmo Solar de Baixa Voltagem
