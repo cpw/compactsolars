@@ -46,7 +46,7 @@ public class ItemSolarHat extends ItemArmor implements ISpecialArmor {
     }
 
     @Override
-    public String getArmorTexture(ItemStack stack, Entity entity, int slot, int layer)
+    public String getArmorTexture(ItemStack stack, Entity entity, int slot, String layerType)
     {
         return type.hatTexture.toString();
     }
