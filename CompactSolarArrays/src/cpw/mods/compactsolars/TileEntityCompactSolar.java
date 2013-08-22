@@ -287,7 +287,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
     @Override
     public double getOfferedEnergy()
     {
-        return currentEnergy;
+        return currentEnergy > 0 ? currentEnergy : 0;
     }
     @Override
     public void drawEnergy(double amount)
