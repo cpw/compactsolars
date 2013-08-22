@@ -86,11 +86,11 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 			energyProduction -= leftovers;
 		}
 		if (energyProduction > 0) {
-		    this.currentEnergy = energyProduction;
+		    this.currentEnergy += energyProduction;
 		}
-		else
+		if (this.currentEnergy >= type.maxStorage)
 		{
-		    this.currentEnergy = 0;
+		    this.currentEnergy = type.maxStorage;
 		}
 	}
 
@@ -287,7 +287,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
     @Override
     public double getOfferedEnergy()
     {
-        return currentEnergy > 0 ? currentEnergy : 0;
+        return currentEnergy > type.outputPacketSize ? type.outputPacketSize : 0;
     }
     @Override
     public void drawEnergy(double amount)
