@@ -294,4 +294,10 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
     {
         currentEnergy -= amount;
     }
+    
+    //@Override
+    public int getTier()
+    {
+        return type.ordinal()+1;
+    }
 }
