@@ -109,6 +109,7 @@
       </mappedresources>
       <fileset dir="${resource.dir}" erroronmissingdir="false">
 	    <filename name="**/*.png" />
+	    <filename name="**/*.lang" />
       </fileset>
     </jar>
   </target>
