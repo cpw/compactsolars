@@ -17,6 +17,7 @@ import ic2.api.tile.IWrenchable;
 import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
+import ic2.api.energy.prefab.BasicSource;
 import ic2.api.energy.tile.IEnergySource;
 import ic2.api.network.INetworkDataProvider;
 import ic2.api.network.INetworkUpdateListener;
@@ -36,8 +37,8 @@ import net.minecraft.tileentity.TileEntity;
 import net.minecraftforge.common.ForgeDirection;
 import net.minecraftforge.common.MinecraftForge;
 
-public class TileEntityCompactSolar extends TileEntity implements IInventory, IEnergySource, INetworkDataProvider, INetworkUpdateListener,
-		IWrenchable {
+public class TileEntityCompactSolar extends TileEntity implements IInventory, IWrenchable {
+    private BasicSource energySource;
 	private static Random random = new Random();
 	private CompactSolarType type;
 	private ItemStack[] inventory;
@@ -56,15 +57,13 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		this.type=type;
 		this.inventory=new ItemStack[1];
 		this.tick=random.nextInt(64);
+		this.energySource = new BasicSource(this, type.maxStorage, type.ordinal()+1);
 	}
 
 	@Override
 	public void updateEntity() {
+	    energySource.updateEntity();
 		if (!initialized && worldObj != null) {
-			if (!worldObj.isRemote) {
-			    EnergyTileLoadEvent loadEvent = new EnergyTileLoadEvent(this);
-			    MinecraftForge.EVENT_BUS.post(loadEvent);
-			}
 			canRain=worldObj.getWorldChunkManager().getBiomeGenAt(xCoord, zCoord).getIntRainfall()>0;
 			noSunlight=worldObj.provider.hasNoSky;
 			initialized = true;
@@ -92,6 +91,8 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		{
 		    this.currentEnergy = type.maxStorage;
 		}
+		energySource.addEnergy(this.currentEnergy);
+		this.currentEnergy = 0;
 	}
 
 	private void updateSunState() {
@@ -103,17 +104,6 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		return type.getOutput();
 	}
 
-
-	@Override
-	public void onNetworkUpdate(String field) {
-
-	}
-
-	private static List<String> fields=Arrays.asList(new String[0]);
-	@Override
-	public List<String> getNetworkedFields() {
-		return fields;
-	}
 
 	public ItemStack[] getContents() {
 		return inventory;
@@ -228,6 +218,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 		}
 
 		nbttagcompound.setTag("Items", nbttaglist);
+		energySource.onWriteToNbt(nbttagcompound);
 	}
 
 	@Override
@@ -248,10 +239,17 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
 	}
 
 	@Override
-	public void invalidate() {
-	    EnergyTileUnloadEvent unloadEvent = new EnergyTileUnloadEvent(this);
-	    MinecraftForge.EVENT_BUS.post(unloadEvent);
+	public void onChunkUnload()
+	{
+	    energySource.onChunkUnload();
 	}
+	
+	@Override
+	public void invalidate() {
+	    energySource.invalidate();
+	    super.invalidate();
+	}
+	
 	@Override
 	public ItemStack getStackInSlotOnClosing(int var1) {
     if (this.inventory[var1] != null)
@@ -278,26 +276,5 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IE
     public boolean isItemValidForSlot(int i, ItemStack itemstack)
     {
         return itemstack !=null && itemstack.getItem() instanceof IElectricItem;
-    }
-    @Override
-    public boolean emitsEnergyTo(TileEntity receiver, ForgeDirection direction)
-    {
-        return true;
-    }
-    @Override
-    public double getOfferedEnergy()
-    {
-        return currentEnergy > type.outputPacketSize ? type.outputPacketSize : 0;
-    }
-    @Override
-    public void drawEnergy(double amount)
-    {
-        currentEnergy -= amount;
-    }
-    
-    //@Override
-    public int getTier()
-    {
-        return type.ordinal()+1;
     }
 }
