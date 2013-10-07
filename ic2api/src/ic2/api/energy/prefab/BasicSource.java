@@ -1,5 +1,6 @@
 package ic2.api.energy.prefab;
 
+import net.minecraft.item.ItemStack;
 import net.minecraft.nbt.NBTTagCompound;
 import net.minecraft.tileentity.TileEntity;
 
@@ -12,6 +13,7 @@ import ic2.api.energy.EnergyNet;
 import ic2.api.energy.event.EnergyTileLoadEvent;
 import ic2.api.energy.event.EnergyTileUnloadEvent;
 import ic2.api.energy.tile.IEnergySource;
+import ic2.api.item.ElectricItem;
 
 /**
  * BasicSource is a simple adapter to provide an ic2 energy source.
@@ -219,6 +221,22 @@ public class BasicSource extends TileEntity implements IEnergySource {
 		energyStored += amount;
 
 		return amount;
+	}
+
+	/**
+	 * Charge the supplied ItemStack from this source's energy buffer.
+	 * 
+	 * @param stack ItemStack to charge (null is ignored)
+	 * @return true if energy was transferred
+	 */
+	public boolean charge(ItemStack stack) {
+		if (stack == null) return false;
+
+		int amount = ElectricItem.manager.charge(stack, (int) energyStored, tier, false, false);
+
+		energyStored -= amount;
+
+		return amount > 0;
 	}
 
 	// << methods for using this adapter

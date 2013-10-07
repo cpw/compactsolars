@@ -73,7 +73,7 @@ import ic2.api.energy.tile.IEnergySink;
  *     public void updateEntity() {
  *         ic2EnergySink.onUpdateEntity(); // notify the energy sink
  *         ...
- *         if (ic2EnergySink.addEnergy(5)) { // use 5 eu from the sink's buffer this tick
+ *         if (ic2EnergySink.useEnergy(5)) { // use 5 eu from the sink's buffer this tick
  *             ... // do something with the energy
  *         }
  *         ...
