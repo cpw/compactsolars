@@ -62,7 +62,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IW
 
     @Override
     public void updateEntity() {
-        energySource.updateEntity();
+        energySource.onUpdateEntity();
         if (!initialized && worldObj != null) {
             canRain = worldObj.getWorldChunkManager().getBiomeGenAt(xCoord, zCoord).getIntRainfall() > 0;
             noSunlight = worldObj.provider.hasNoSky;
@@ -238,7 +238,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IW
 
     @Override
     public void invalidate() {
-        energySource.invalidate();
+        energySource.onInvalidate();
         super.invalidate();
     }
 
