@@ -215,7 +215,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IW
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
-        energySource.readFromNBT(nbttagcompound);
+        energySource.onReadFromNbt(nbttagcompound);
         NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
         inventory = new ItemStack[getSizeInventory()];
         for (int i = 0; i < nbttaglist.tagCount(); i++) {
