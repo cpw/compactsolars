@@ -18,20 +18,20 @@ import net.minecraft.item.ItemBlockWithMetadata;
 import net.minecraft.item.ItemStack;
 
 public class ItemCompactSolar extends ItemBlockWithMetadata {
-	public ItemCompactSolar(int id) {
-		super(id, CompactSolars.compactSolarBlock);
-	}
+    public ItemCompactSolar(int id) {
+        super(id, CompactSolars.compactSolarBlock);
+    }
 
-	public int getMetadata(int i) {
-		if (i<CompactSolarType.values().length) {
-			return i;
-		} else {
-			return 0;
-		}
-	}
-	@Override
-	public String getUnlocalizedName(ItemStack itemstack)
-	{
-		return "tile.compactsolars:"+CompactSolarType.values()[itemstack.getItemDamage()].name()+"_block";
-	}
+    public int getMetadata(int i) {
+        if (i < CompactSolarType.values().length) {
+            return i;
+        } else {
+            return 0;
+        }
+    }
+
+    @Override
+    public String getUnlocalizedName(ItemStack itemstack) {
+        return "tile.compactsolars:" + CompactSolarType.values()[itemstack.getItemDamage()].name() + "_block";
+    }
 }

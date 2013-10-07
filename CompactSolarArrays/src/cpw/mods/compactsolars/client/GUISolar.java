@@ -22,57 +22,57 @@ import cpw.mods.compactsolars.ContainerCompactSolar;
 import cpw.mods.compactsolars.TileEntityCompactSolar;
 
 public class GUISolar extends GuiContainer {
-    public static final ResourceLocation gui = new ResourceLocation("ic2","textures/gui/GUISolarGenerator.png");
-	public enum GUI {
-		LV(CompactSolarType.LV),
-		MV(CompactSolarType.MV),
-		HV(CompactSolarType.HV);
+    public static final ResourceLocation gui = new ResourceLocation("ic2", "textures/gui/GUISolarGenerator.png");
 
-		private CompactSolarType mainType;
+    public enum GUI {
+        LV(CompactSolarType.LV), MV(CompactSolarType.MV), HV(CompactSolarType.HV);
 
-		private GUI(CompactSolarType mainType) {
-			this.mainType=mainType;
-		}
+        private CompactSolarType mainType;
 
-		protected Container makeContainer(IInventory player, TileEntityCompactSolar solarTile) {
-			return new ContainerCompactSolar(player, solarTile, mainType);
-		}
+        private GUI(CompactSolarType mainType) {
+            this.mainType = mainType;
+        }
 
-		public static GUISolar buildGUI(CompactSolarType type, IInventory playerInventory, TileEntityCompactSolar solarTile) {
-			for (GUI gui : values()) {
-				if (solarTile.getType()==gui.mainType) {
-					return new GUISolar(gui,playerInventory,solarTile);
-				}
-			}
-			return null;
-		}
-	}
+        protected Container makeContainer(IInventory player, TileEntityCompactSolar solarTile) {
+            return new ContainerCompactSolar(player, solarTile, mainType);
+        }
 
-	private GUI type;
-	private ContainerCompactSolar container;
-	private GUISolar(GUI type, IInventory player, TileEntityCompactSolar chest) {
-		super(type.makeContainer(player,chest));
-		this.container=(ContainerCompactSolar)inventorySlots;
-		this.type=type;
-		this.allowUserInput=false;
-	}
+        public static GUISolar buildGUI(CompactSolarType type, IInventory playerInventory, TileEntityCompactSolar solarTile) {
+            for (GUI gui : values()) {
+                if (solarTile.getType() == gui.mainType) {
+                    return new GUISolar(gui, playerInventory, solarTile);
+                }
+            }
+            return null;
+        }
+    }
 
-	@Override
-	protected void drawGuiContainerForegroundLayer(int p1, int p2) {
+    private GUI type;
+    private ContainerCompactSolar container;
+
+    private GUISolar(GUI type, IInventory player, TileEntityCompactSolar chest) {
+        super(type.makeContainer(player, chest));
+        this.container = (ContainerCompactSolar) inventorySlots;
+        this.type = type;
+        this.allowUserInput = false;
+    }
+
+    @Override
+    protected void drawGuiContainerForegroundLayer(int p1, int p2) {
         fontRenderer.drawString(type.mainType.friendlyName, 8, 6, 0x404040);
         fontRenderer.drawString("Inventory", 8, (ySize - 96) + 2, 0x404040);
-	}
-	@Override
-	protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
+    }
+
+    @Override
+    protected void drawGuiContainerBackgroundLayer(float f, int i, int j) {
         GL11.glColor4f(1.0F, 1.0F, 1.0F, 1.0F);
         mc.renderEngine.bindTexture(gui);
         int l = (width - xSize) / 2;
         int i1 = (height - ySize) / 2;
         drawTexturedModalRect(l, i1, 0, 0, xSize, ySize);
-        if (container.tile.theSunIsVisible)
-        {
+        if (container.tile.theSunIsVisible) {
             drawTexturedModalRect(l + 80, i1 + 45, 176, 0, 14, 14);
         }
-	}
+    }
 
 }

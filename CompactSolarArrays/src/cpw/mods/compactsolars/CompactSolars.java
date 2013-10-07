@@ -28,60 +28,58 @@ import cpw.mods.fml.common.network.NetworkRegistry;
 import cpw.mods.fml.common.registry.GameRegistry;
 import cpw.mods.fml.common.registry.LanguageRegistry;
 
-@Mod(modid="CompactSolars", name="Compact Solar Arrays", dependencies="required-after:IC2@[2.0,);required-after:Forge@[9.10,)")
-@NetworkMod(clientSideRequired=false,serverSideRequired=false,versionBounds="[4.4,)")
+@Mod(modid = "CompactSolars", name = "Compact Solar Arrays", dependencies = "required-after:IC2@[2.0,);required-after:Forge@[9.10,)")
+@NetworkMod(clientSideRequired = false, serverSideRequired = false, versionBounds = "[4.4,)")
 public class CompactSolars {
-  @SidedProxy(clientSide="cpw.mods.compactsolars.client.ClientProxy", serverSide="cpw.mods.compactsolars.CommonProxy")
-	public static CommonProxy proxy;
-	public static BlockCompactSolar compactSolarBlock;
-	public static int productionRate=1;
-	@Instance("CompactSolars")
-	public static CompactSolars instance;
+    @SidedProxy(clientSide = "cpw.mods.compactsolars.client.ClientProxy", serverSide = "cpw.mods.compactsolars.CommonProxy")
+    public static CommonProxy proxy;
+    public static BlockCompactSolar compactSolarBlock;
+    public static int productionRate = 1;
+    @Instance("CompactSolars")
+    public static CompactSolars instance;
 
-	@EventHandler
-	public void preInit(FMLPreInitializationEvent preinit) {
-		Version.init(preinit.getVersionProperties());
+    @EventHandler
+    public void preInit(FMLPreInitializationEvent preinit) {
+        Version.init(preinit.getVersionProperties());
         preinit.getModMetadata().version = Version.version();
-		Configuration cfg = new Configuration(preinit.getSuggestedConfigurationFile());
-		try {
-			cfg.load();
-			Property block = cfg.getBlock("compactSolar", 650);
-			block.comment="The block id for the compact solar arrays.";
-			compactSolarBlock = new BlockCompactSolar(block.getInt(650));
-			CompactSolarType.buildHats(cfg, 19551);
-			Property scale = cfg.get(Configuration.CATEGORY_GENERAL, "scaleFactor", 1);
-			scale.comment="The EU generation scaling factor. " +
-					"The average number of ticks needed to generate one EU packet." +
-					"1 is every tick, 2 is every other tick etc. " +
-					"Each Solar will still generate a whole packet (8, 64, 512 EU).";
-			productionRate = scale.getInt(1);
-		} catch (Exception e) {
-			FMLLog.log(Level.SEVERE, e, "CompactSolars was unable to load it's configuration successfully");
-			throw new RuntimeException(e);
-		} finally {
-			cfg.save();
-		}
-	}
-    @EventHandler
-	public void load(FMLInitializationEvent init) {
-		GameRegistry.registerBlock(compactSolarBlock, ItemCompactSolar.class, "CompactSolarBlock");
-		for (CompactSolarType typ : CompactSolarType.values()) {
-			GameRegistry.registerTileEntity(typ.clazz, typ.tileEntityName());
-		}
-		proxy.registerTileEntityRenderers();
-		proxy.registerRenderInformation();
-		NetworkRegistry.instance().registerGuiHandler(this, proxy);
-	}
+        Configuration cfg = new Configuration(preinit.getSuggestedConfigurationFile());
+        try {
+            cfg.load();
+            Property block = cfg.getBlock("compactSolar", 650);
+            block.comment = "The block id for the compact solar arrays.";
+            compactSolarBlock = new BlockCompactSolar(block.getInt(650));
+            CompactSolarType.buildHats(cfg, 19551);
+            Property scale = cfg.get(Configuration.CATEGORY_GENERAL, "scaleFactor", 1);
+            scale.comment = "The EU generation scaling factor. " + "The average number of ticks needed to generate one EU packet." + "1 is every tick, 2 is every other tick etc. "
+                    + "Each Solar will still generate a whole packet (8, 64, 512 EU).";
+            productionRate = scale.getInt(1);
+        } catch (Exception e) {
+            FMLLog.log(Level.SEVERE, e, "CompactSolars was unable to load it's configuration successfully");
+            throw new RuntimeException(e);
+        } finally {
+            cfg.save();
+        }
+    }
 
     @EventHandler
-	public void modsLoaded(FMLPostInitializationEvent postinit) {
-		CompactSolarType.generateRecipes(compactSolarBlock);
-		CompactSolarType.generateHatRecipes(compactSolarBlock);
-	}
+    public void load(FMLInitializationEvent init) {
+        GameRegistry.registerBlock(compactSolarBlock, ItemCompactSolar.class, "CompactSolarBlock");
+        for (CompactSolarType typ : CompactSolarType.values()) {
+            GameRegistry.registerTileEntity(typ.clazz, typ.tileEntityName());
+        }
+        proxy.registerTileEntityRenderers();
+        proxy.registerRenderInformation();
+        NetworkRegistry.instance().registerGuiHandler(this, proxy);
+    }
 
     @EventHandler
-	public void resetMap(FMLServerStoppingEvent evt)
-	{
-	    ItemSolarHat.clearRaining();
-	}
+    public void modsLoaded(FMLPostInitializationEvent postinit) {
+        CompactSolarType.generateRecipes(compactSolarBlock);
+        CompactSolarType.generateHatRecipes(compactSolarBlock);
+    }
+
+    @EventHandler
+    public void resetMap(FMLServerStoppingEvent evt) {
+        ItemSolarHat.clearRaining();
+    }
 }

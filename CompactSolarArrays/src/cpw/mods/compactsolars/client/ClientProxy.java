@@ -18,24 +18,24 @@ import cpw.mods.compactsolars.CommonProxy;
 import cpw.mods.compactsolars.TileEntityCompactSolar;
 
 public class ClientProxy extends CommonProxy {
-	@Override
-	public void registerTileEntityRenderers() {
-		// NOOP for now
-	}
+    @Override
+    public void registerTileEntityRenderers() {
+        // NOOP for now
+    }
 
-	@Override
-	public void registerRenderInformation() {
-	}
+    @Override
+    public void registerRenderInformation() {
+    }
 
-	@Override
-	public Object getClientGuiElement(int ID, EntityPlayer player, World world, int X, int Y, int Z) {
-		TileEntity te=world.getBlockTileEntity(X, Y, Z);
-		if (te!=null && te instanceof TileEntityCompactSolar) {
-			TileEntityCompactSolar tecs=(TileEntityCompactSolar) te;
-			return GUISolar.GUI.buildGUI(tecs.getType(), player.inventory, tecs);
-		} else {
-			return null;
-		}
-	}
+    @Override
+    public Object getClientGuiElement(int ID, EntityPlayer player, World world, int X, int Y, int Z) {
+        TileEntity te = world.getBlockTileEntity(X, Y, Z);
+        if (te != null && te instanceof TileEntityCompactSolar) {
+            TileEntityCompactSolar tecs = (TileEntityCompactSolar) te;
+            return GUISolar.GUI.buildGUI(tecs.getType(), player.inventory, tecs);
+        } else {
+            return null;
+        }
+    }
 
 }
