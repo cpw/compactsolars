@@ -47,7 +47,6 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IW
     private int tick;
     private boolean canRain;
     private boolean noSunlight;
-    private double currentEnergy;
 
     public TileEntityCompactSolar() {
         this(CompactSolarType.LV);
@@ -81,18 +80,11 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IW
         if (theSunIsVisible && (CompactSolars.productionRate == 1 || random.nextInt(CompactSolars.productionRate) == 0)) {
             energyProduction = generateEnergy();
         }
-        if (energyProduction > 0 && inventory[0] != null && (Item.itemsList[inventory[0].itemID] instanceof IElectricItem)) {
-            int leftovers = ElectricItem.manager.charge(inventory[0], energyProduction, type.ordinal() + 1, false, false);
-            energyProduction -= leftovers;
+        energySource.addEnergy(energyProduction);
+        
+        if (inventory[0] != null && (Item.itemsList[inventory[0].itemID] instanceof IElectricItem)) {
+            energySource.charge(inventory[0]);
         }
-        if (energyProduction > 0) {
-            this.currentEnergy += energyProduction;
-        }
-        if (this.currentEnergy >= type.maxStorage) {
-            this.currentEnergy = type.maxStorage;
-        }
-        energySource.addEnergy(this.currentEnergy);
-        this.currentEnergy = 0;
     }
 
     private void updateSunState() {
@@ -223,6 +215,7 @@ public class TileEntityCompactSolar extends TileEntity implements IInventory, IW
     @Override
     public void readFromNBT(NBTTagCompound nbttagcompound) {
         super.readFromNBT(nbttagcompound);
+        energySource.readFromNBT(nbttagcompound);
         NBTTagList nbttaglist = nbttagcompound.getTagList("Items");
         inventory = new ItemStack[getSizeInventory()];
         for (int i = 0; i < nbttaglist.tagCount(); i++) {
