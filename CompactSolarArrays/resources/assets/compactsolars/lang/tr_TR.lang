@@ -1,0 +1,7 @@
+tile.compactsolars:HV_block.name=Yüksek Voltajlı Güneş Paneli
+tile.compactsolars:MV_block.name=Orta Voltajlı Güneş Paneli
+tile.compactsolars:LV_block.name=Düşük Voltajlı Güneş Paneli
+
+item.compactsolars:solarHatHV.name=Yüksek Voltajlı Güneş Kaskı
+item.compactsolars:solarHatMV.name=Orta Voltajlı Güneş Kaskı
+item.compactsolars:solarHatLV.name=Düşük Voltajlı Güneş Kaskı
