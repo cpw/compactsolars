@@ -1,5 +1,3 @@
-bin/
-build.properties
-forge/
-.metadata/
-CompactSolarArrays/target/
+compactsolarsversion.properties
+version.properties
+/bin
