@@ -39,13 +39,13 @@ public class CompactSolars
     @EventHandler
     public void preInit (FMLPreInitializationEvent preinit)
     {
-        FMLLog.log(Level.ERROR, "CompactSolars ");
         Version.init(preinit.getVersionProperties());
         preinit.getModMetadata().version = Version.version();
         Configuration cfg = new Configuration(preinit.getSuggestedConfigurationFile());
         try
         {
             cfg.load();
+            compactSolarBlock = new BlockCompactSolar();
             CompactSolarType.buildHats();
             Property scale = cfg.get(Configuration.CATEGORY_GENERAL, "scaleFactor", 1);
             scale.comment = "The EU generation scaling factor. " + "The average number of ticks needed to generate one EU packet." + "1 is every tick, 2 is every other tick etc. "
