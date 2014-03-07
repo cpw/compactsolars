@@ -10,18 +10,12 @@
   "authors": [
     "cpw"
   ],
-  "credits": "By cpw, based on an original idea by Zippinus",
+  "credits": "By cpw, based on an original idea by Zippinus, 1.7.2 update by ProgWML6",
   "logoFile": "",
   "screenshots": [
   ],
   "parent":"",
-  "requiredMods": [
-    "IC2@[2.1,)",
-    "Forge@[10.12,)"
-  ],
   "dependencies": [
-  	"IC2@[2.1,)"
-  ],
-  "useDependencyInformation" : "true"
+  ]
 }
 ]
