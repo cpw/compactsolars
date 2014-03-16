@@ -1,0 +1,21 @@
+[
+{
+  "modid": "CompactSolars",
+  "name": "Compact Solar Arrays",
+  "description": "Compact Solar Arrays, an Industrial Craft 2 mod that adds in three new Solar Panel type blocks: Solar Arrays.\nSolar Arrays condense 8 (Low Voltage), 64 (Medium Voltage) or 512 (High Voltage) Industrial Craft 2 solar panels into a single block.\nThis significantly reduces the CPU impact of large amounts of Solar Energy gathering so is a common server enhancement.\nNew in 4.0: Solar Hats- charge armor at the same rate as their block counterparts would",
+  "version": "${version}",
+  "mcversion": ${mcversion}",
+  "url": "http://forum.industrial-craft.net/index.php?page=Thread&threadID=4827",
+  "updateUrl": "",
+  "authors": [
+    "cpw"
+  ],
+  "credits": "By cpw, based on an original idea by Zippinus, 1.7.2 update by ProgWML6",
+  "logoFile": "",
+  "screenshots": [
+  ],
+  "parent":"",
+  "dependencies": [
+  ]
+}
+]
