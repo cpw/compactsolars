@@ -1,0 +1,7 @@
+tile.compactsolars:HV_block.name=高压太阳能阵列
+tile.compactsolars:MV_block.name=中压太阳能阵列
+tile.compactsolars:LV_block.name=低压太阳能阵列
+
+item.compactsolars:solarHatHV.name=高压太阳能头盔
+item.compactsolars:solarHatMV.name=中压太阳能头盔
+item.compactsolars:solarHatLV.name=低压太阳能头盔
